@@ -21,8 +21,8 @@ public abstract class OSIHttpLoaderCallBack<T> {
     /**
      * @return 泛型的类型
      */
-    public Type getType(){
-        if(mType==null){
+    public Type getType() {
+        if (mType == null) {
             mType = getSuperclassTypeParameter(getClass());
         }
         return mType;
@@ -41,16 +41,18 @@ public abstract class OSIHttpLoaderCallBack<T> {
 
     /**
      * 由于gson解析错误引起的异常
-     * @param response  解析之前的数据流
+     *
+     * @param response 解析之前的数据流
      * @param e
      */
-    public abstract void onErrorGsonException(String response,Exception e);
+    public abstract void onErrorGsonException(String response, Exception e);
 
     public abstract void onError(String errorMsg);
 
     /**
+     * @param strResponse 转换gson之前的字符串，可用来做便捷sql存储和其他用途
      * @param response 泛型必须传，假如不需gson解析的话可以传String
      *                 使用子类OSIHttpDownloadCallBack时response为下载成功后的绝对路径
      */
-    public abstract void onResponse(T response);
+    public abstract void onResponse(String strResponse, T response);
 }

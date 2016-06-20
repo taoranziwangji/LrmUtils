@@ -31,7 +31,8 @@ dependencies {
     //图片裁剪
     compile 'com.soundcloud.android:android-crop:1.0.1@aar'
     //picasso
-    compile 'com.squareup.picasso:picasso:2.5.2'
+    //compile 'com.squareup.picasso:picasso:2.5.2'//解决使用mulitiImageSelector时需要2.4版本才能在相册选择时不会出现多图时有些大图显示不出来的问题，好像是2.5.2的一个BUG
+    compile 'com.squareup.picasso:picasso:2.4.0'
     //okhttp
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
     //gson

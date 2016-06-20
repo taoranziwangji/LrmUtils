@@ -5,9 +5,21 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Random;
 
 public class TimeChangeUtil {
+
+    /**
+     * 将毫秒数转换成时间日期 yyyy-MM-dd HH:mm:ss
+     * @param millisecond
+     * @return
+     */
+    public static String millisecondToDate(long millisecond){
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(millisecond);
+        //String strTime = cal.getTime().toLocaleString();
+        String strTime = dateToStrLong(cal.getTime());
+        return strTime;
+    }
 
     /**
      * 将长时间格式字符串转换为date时间
@@ -60,18 +72,7 @@ public class TimeChangeUtil {
     }
 
 
-    /**
-     * 根据用户传入的时间表示格式，按照这个格式返回当前时间,注意字母y不能大写。
-     *
-     * @param sformat ex:MMddyyyy mmss
-     * @return ex:03302016 3908
-     */
-    public static String getDateByUserRule(String sformat) {
-        Date currentTime = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat(sformat);
-        String dateString = formatter.format(currentTime);
-        return dateString;
-    }
+
 
 
     /**
@@ -295,32 +296,7 @@ public class TimeChangeUtil {
         return newday;
     }
 
-    /**
-     * 取得数据库主键 生成格式为yyyymmddhhmmss+k位随机数
-     *
-     * @param k 表示是取几位随机数，可以自己定
-     */
-    public static String getSqlKey(int k) {
-        return getDateByUserRule("yyyyMMddhhmmss") + getARandomNumber(k);
-    }
 
-    /**
-     * 返回一个随机数
-     *
-     * @param i 随机数的位数
-     * @return
-     */
-    public static String getARandomNumber(int i) {
-        Random jjj = new Random();
-        // int suiJiShu = jjj.nextInt(9);
-        if (i == 0)
-            return "";
-        String jj = "";
-        for (int k = 0; k < i; k++) {
-            jj = jj + jjj.nextInt(9);
-        }
-        return jj;
-    }
 
 
 }

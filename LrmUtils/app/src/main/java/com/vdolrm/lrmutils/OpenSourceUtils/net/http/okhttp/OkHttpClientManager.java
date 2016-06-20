@@ -7,8 +7,10 @@ import android.os.Looper;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
-import com.vdolrm.lrmutils.OpenSourceUtils.net.up_downLoad.OSIHttpDownloadCallBack;
+import com.vdolrm.lrmutils.NetUtils.NetCheckUtil;
+import com.vdolrm.lrmutils.OpenSourceUtils.net.download.OSIHttpDownloadCallBack;
 import com.vdolrm.lrmutils.OpenSourceUtils.net.http.OSIHttpLoaderCallBack;
+import com.vdolrm.lrmutils.UIUtils.UIUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,6 +26,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.Headers;
+import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -46,8 +49,34 @@ public class OkHttpClientManager {
 
     private static final String TAG = "OkHttpClientManager";
 
+    //lrm test cache
+    private static final Interceptor REWRITE_CACHE_CONTROL_INTERCEPTOR = new Interceptor() {
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+            Response originalResponse = chain.proceed(chain.request());
+            if (NetCheckUtil.isNetworkConnected(UIUtils.getContext())) {
+                int maxAge = 60; // read from cache for 1 minute
+                return originalResponse.newBuilder()
+                        .header("Cache-Control", "public, max-age=" + maxAge)
+                        .build();
+            } else {
+                int maxStale = 60 * 60 * 24 * 28; // tolerate 4-weeks stale
+                return originalResponse.newBuilder()
+                        .header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)
+                        .build();
+            }
+        }
+    };
+
     private OkHttpClientManager() {
         mOkHttpClient = new OkHttpClient();
+        //根据业务服务器的配置来定，笨鸟服务器返回的接口没让缓存
+//        int cacheSize = 10 * 1024 * 1024; // 10 MiB
+//        Cache cache = new Cache(new File(StorageUtil.getAppCachePath(UIUtils.getContext()) + "/httpCache"), cacheSize);
+//        mOkHttpClient = new OkHttpClient.Builder().cache(cache).build();
+
+        //mOkHttpClient.networkInterceptors().add(REWRITE_CACHE_CONTROL_INTERCEPTOR);//exception
+
         //cookie enabled
         //mOkHttpClient.setCookieHandler(new CookieManager(null, CookiePolicy.ACCEPT_ORIGINAL_SERVER));
         mDelivery = new Handler(Looper.getMainLooper());
@@ -101,6 +130,11 @@ public class OkHttpClientManager {
     private Call _getAsyn(String url, final OSIHttpLoaderCallBack callback) {
         final Request request = new Request.Builder()
                 .url(url)
+//根据业务服务器的配置来定，笨鸟服务器返回的接口没让缓存
+//                .cacheControl(new CacheControl.Builder()
+//                        .maxAge(1, TimeUnit.DAYS)
+//                        .maxStale(1, TimeUnit.DAYS)
+//                        .build())
                 .build();
         return deliveryResult(callback, request);
     }
@@ -238,55 +272,55 @@ public class OkHttpClientManager {
      * @param url
      * @param destFileDir 本地文件存储的文件夹
      * @param callback
-     * @param fileName 文件名
+     * @param fileName    文件名
      */
     private void _downloadAsyn(final String url, final String destFileDir, final String fileName, final OSIHttpDownloadCallBack callback) {
 
-            final Request request = new Request.Builder()
-                    .url(url)
-                    .build();
-            final Call call = mOkHttpClient.newCall(request);
-            call.enqueue(new Callback() {
-                @Override
-                public void onFailure(final Call call, final IOException e) {
-                    sendFailedStringCallback(request, e, callback);
-                }
+        final Request request = new Request.Builder()
+                .url(url)
+                .build();
+        final Call call = mOkHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(final Call call, final IOException e) {
+                sendFailedStringCallback(request, e, callback);
+            }
 
-                @Override
-                public void onResponse(Call call, Response response) {
-                    InputStream is = null;
-                    byte[] buf = new byte[2048];
-                    int len = 0;//一次读取多少，最大为2046字节
-                    FileOutputStream fos = null;
-                    try {
-                        long contentLength = response.body().contentLength();
+            @Override
+            public void onResponse(Call call, Response response) {
+                InputStream is = null;
+                byte[] buf = new byte[2048];
+                int len = 0;//一次读取多少，最大为2046字节
+                FileOutputStream fos = null;
+                try {
+                    long contentLength = response.body().contentLength();
 
-                        is = response.body().byteStream();
-                        File file = new File(destFileDir, fileName);
-                        fos = new FileOutputStream(file);
-                        while ((len = is.read(buf)) != -1) {
-                            fos.write(buf, 0, len);
-                            sendLoadingOSIHttpLoaderCallBack(contentLength, file.length(), false, callback);
-                            //MyLog.d("下载文件总大小"+contentLength+",当前文件大小 " + file.length() );//第一个为当前文件大小
-                        }
-                        fos.flush();
-                        //如果下载文件成功，第一个参数为文件的绝对路径
-                        sendSuccessOSIHttpLoaderCallBack(file.getAbsolutePath(), callback);
-                    } catch (IOException e) {
-                        sendFailedStringCallback(response.request(), e, callback);
-                    } finally {
-                        try {
-                            if (is != null) is.close();
-                        } catch (IOException e) {
-                        }
-                        try {
-                            if (fos != null) fos.close();
-                        } catch (IOException e) {
-                        }
+                    is = response.body().byteStream();
+                    File file = new File(destFileDir, fileName);
+                    fos = new FileOutputStream(file);
+                    while ((len = is.read(buf)) != -1) {
+                        fos.write(buf, 0, len);
+                        sendLoadingOSIHttpLoaderCallBack(contentLength, file.length(), false, callback);
+                        //MyLog.d("下载文件总大小"+contentLength+",当前文件大小 " + file.length() );//第一个为当前文件大小
                     }
-
+                    fos.flush();
+                    //如果下载文件成功，第一个参数为文件的绝对路径
+                    sendSuccessOSIHttpLoaderCallBack(file.getAbsolutePath(), file.getAbsolutePath(), callback);
+                } catch (IOException e) {
+                    sendFailedStringCallback(response.request(), e, callback);
+                } finally {
+                    try {
+                        if (is != null) is.close();
+                    } catch (IOException e) {
+                    }
+                    try {
+                        if (fos != null) fos.close();
+                    } catch (IOException e) {
+                    }
                 }
-            });
+
+            }
+        });
 
     }
 
@@ -650,10 +684,10 @@ public class OkHttpClientManager {
                     final String string = response.body().string();
                     strResponse = string;
                     if (callback.getType() == String.class) {
-                        sendSuccessOSIHttpLoaderCallBack(string, callback);
+                        sendSuccessOSIHttpLoaderCallBack(string, string, callback);
                     } else {
                         Object o = mGson.fromJson(string, callback.getType());
-                        sendSuccessOSIHttpLoaderCallBack(o, callback);
+                        sendSuccessOSIHttpLoaderCallBack(string, o, callback);
                     }
 
 
@@ -661,8 +695,8 @@ public class OkHttpClientManager {
                     sendFailedStringCallback(response.request(), e, callback);
                 } catch (com.google.gson.JsonParseException e)//Json解析的错误
                 {
-                   // sendFailedStringCallback(response.request(), e, callback);
-                    sendFailedStringByErrorGsonCallback(response.request(),strResponse,e,callback);
+                    // sendFailedStringCallback(response.request(), e, callback);
+                    sendFailedStringByErrorGsonCallback(response.request(), strResponse, e, callback);
                 }
 
             }
@@ -671,7 +705,7 @@ public class OkHttpClientManager {
         return call;
     }
 
-    private void sendFailedStringCallback(final Request request,final String msg, final OSIHttpLoaderCallBack callback) {
+    private void sendFailedStringCallback(final Request request, final String msg, final OSIHttpLoaderCallBack callback) {
         mDelivery.post(new Runnable() {
             @Override
             public void run() {
@@ -681,17 +715,17 @@ public class OkHttpClientManager {
         });
     }
 
-    private void sendFailedStringByErrorGsonCallback(final Request request,final String strResponse,final Exception e, final OSIHttpLoaderCallBack callback) {
+    private void sendFailedStringByErrorGsonCallback(final Request request, final String strResponse, final Exception e, final OSIHttpLoaderCallBack callback) {
         mDelivery.post(new Runnable() {
             @Override
             public void run() {
                 if (callback != null)
-                    callback.onErrorGsonException(strResponse,e);
+                    callback.onErrorGsonException(strResponse, e);
             }
         });
     }
 
-    private void sendFailedStringCallback(final Request request,final Exception e, final OSIHttpLoaderCallBack callback) {
+    private void sendFailedStringCallback(final Request request, final Exception e, final OSIHttpLoaderCallBack callback) {
         mDelivery.post(new Runnable() {
             @Override
             public void run() {
@@ -701,23 +735,23 @@ public class OkHttpClientManager {
         });
     }
 
-    private void sendSuccessOSIHttpLoaderCallBack(final Object object, final OSIHttpLoaderCallBack callback) {
+    private void sendSuccessOSIHttpLoaderCallBack(final String strResponse, final Object object, final OSIHttpLoaderCallBack callback) {
         mDelivery.post(new Runnable() {
             @Override
             public void run() {
                 if (callback != null) {
-                    callback.onResponse(object);
+                    callback.onResponse(strResponse, object);
                 }
             }
         });
     }
 
-    private void sendLoadingOSIHttpLoaderCallBack(final long total,final long current,final boolean isUploading, final OSIHttpDownloadCallBack callback) {
+    private void sendLoadingOSIHttpLoaderCallBack(final long total, final long current, final boolean isUploading, final OSIHttpDownloadCallBack callback) {
         mDelivery.post(new Runnable() {
             @Override
             public void run() {
                 if (callback != null) {
-                    callback.onLoading(total,current,isUploading);
+                    callback.onLoading(total, current, isUploading);
                 }
             }
         });
@@ -738,8 +772,6 @@ public class OkHttpClientManager {
                 .build();
     }
 
-
-    
 
     public static class Param {
         public Param() {

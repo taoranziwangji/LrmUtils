@@ -1,6 +1,5 @@
 package com.vdolrm.lrmutils;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,23 +27,24 @@ public abstract class BaseFragment extends Fragment {
 	/** 加载完成的View */
 	public abstract View createLoadedView(boolean reLoading);
 	//public abstract int onLoadState();//假如不能得到的话考虑用callback
-	public abstract View createLoadingView();
-	public abstract View createEmptyView();
-	public abstract View createErrorView();
-	public abstract View createNetErrorView();
+	public abstract View createLoadingView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
+	public abstract View createEmptyView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
+	public abstract View createErrorView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
+	public abstract View createNetErrorView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
 	
 	
 	private View loadingView;//加载时显示的View
 	private View errorView;//加载出错显示的View
 	private View emptyView;//加载没有数据显示的View
-	private View successView;
+	//private View successView;
 	private View netErrorView;
 	
 	public BaseFragment(){
-		loadingView = createLoadingView();
+		//移到了onCreateView中
+		/*loadingView = createLoadingView();
 		errorView = createErrorView();
 		emptyView = createEmptyView();
-		netErrorView = createNetErrorView();
+		netErrorView = createNetErrorView();*/
 	}
 	
 	@Override
@@ -58,12 +58,16 @@ public abstract class BaseFragment extends Fragment {
 			MyLog.d("remove View");
 			ViewUtils.removeSelfFromParent(v);
 		}*/
+
+		loadingView = createLoadingView(inflater,container,savedInstanceState);
+		errorView = createErrorView(inflater,container,savedInstanceState);
+		emptyView = createEmptyView(inflater,container,savedInstanceState);
+		netErrorView = createNetErrorView(inflater,container,savedInstanceState);
 		
 		if (mContentView == null) {
 			mContentView = new LoadingPage(UIUtils.getContext()) {
 				@Override
 				public View createNetErrorView() {
-					// TODO Auto-generated method stub
 					if(netErrorView!=null){
 						return netErrorView;
 					}
@@ -72,7 +76,6 @@ public abstract class BaseFragment extends Fragment {
 
 				@Override
 				public View createLoadingView() {
-					// TODO Auto-generated method stub
 					if(loadingView!=null){
 						return loadingView;
 					}
@@ -81,7 +84,6 @@ public abstract class BaseFragment extends Fragment {
 
 				@Override
 				public View createEmptyView() {
-					// TODO Auto-generated method stub
 					if(emptyView!=null){
 						return emptyView;
 					}
@@ -90,7 +92,6 @@ public abstract class BaseFragment extends Fragment {
 
 				@Override
 				public View createErrorView() {
-					// TODO Auto-generated method stub
 					if(errorView!=null){
 						return errorView;
 					}
@@ -129,6 +130,15 @@ public abstract class BaseFragment extends Fragment {
 		ThreadManager.getLongPool().execute(task);
 		
 	}
+
+    /**
+     * 当网络请求失败时，公开出的重试方法
+     */
+    public void reTry(){
+        if(mContentView!=null){
+            mContentView.retry();
+        }
+    }
 	
 	
 	class showTask implements Runnable {
@@ -190,6 +200,7 @@ public abstract class BaseFragment extends Fragment {
          
          
     }
+
 
 
 	/*业务类基类自己实现

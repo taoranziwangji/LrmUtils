@@ -1,13 +1,13 @@
-package com.vdolrm.lrmutils.OpenSourceUtils.net.up_downLoad.okhttp;
+package com.vdolrm.lrmutils.OpenSourceUtils.net.download.okhttp;
 
 import com.vdolrm.lrmutils.OpenSourceUtils.net.http.okhttp.OkHttpClientManager;
-import com.vdolrm.lrmutils.OpenSourceUtils.net.up_downLoad.OSIHttpDownloadCallBack;
-import com.vdolrm.lrmutils.OpenSourceUtils.net.up_downLoad.OSIUpDownLoad;
+import com.vdolrm.lrmutils.OpenSourceUtils.net.download.OSIHttpDownloadCallBack;
+import com.vdolrm.lrmutils.OpenSourceUtils.net.download.OSIDownLoad;
 
 /**
  * Created by Administrator on 2016/4/5.
  */
-public class TestUpDownLoadOkHttpImpl implements OSIUpDownLoad {
+public class TestDownLoadOkHttpImpl implements OSIDownLoad {
     @Override
     public void download(String url, String destDir, String fileName, OSIHttpDownloadCallBack callback) {
         OkHttpClientManager.downloadAsyn(url,destDir,fileName,callback);

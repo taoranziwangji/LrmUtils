@@ -1,4 +1,4 @@
-package com.vdolrm.lrmutils.OpenSourceUtils.net.up_downLoad;
+package com.vdolrm.lrmutils.OpenSourceUtils.net.download;
 
 import com.vdolrm.lrmutils.OpenSourceUtils.net.http.OSIHttpLoaderCallBack;
 

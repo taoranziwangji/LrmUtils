@@ -1,5 +1,7 @@
 package com.vdolrm.lrmutils.OpenSourceUtils.net.http;
 
+import java.util.Map;
+
 /**
  * Created by Administrator on 2016/4/1.
  */
@@ -15,21 +17,35 @@ public abstract class OSBaseHttpLoaderPresenter {
 
     /**
      * 加载
+     *
      * @param url
      * @param objectCallBack
      */
     public void load(String url, OSIHttpLoaderCallBack objectCallBack) {
         if (osiHttpLoader != null)
-            osiHttpLoader.getAsync(url,objectCallBack);
+            osiHttpLoader.getAsync(url, objectCallBack);
     }
 
 
     /**
      * 取消网络请求
      */
-    public void cancelRequest(){
-        if(osiHttpLoader!=null){
+    public void cancelRequest() {
+        if (osiHttpLoader != null) {
             osiHttpLoader.cancelRequest();
+        }
+    }
+
+    /**
+     * post异步
+     *
+     * @param url
+     * @param callBack
+     * @param params
+     */
+    public void postAsync(String url, OSIHttpLoaderCallBack callBack, Map<String, String> params) {
+        if (osiHttpLoader != null) {
+            osiHttpLoader.postAsync(url, callBack, params);
         }
     }
 }

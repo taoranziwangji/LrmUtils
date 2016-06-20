@@ -1,15 +1,15 @@
-package com.vdolrm.lrmutils.OpenSourceUtils.net.up_downLoad;
+package com.vdolrm.lrmutils.OpenSourceUtils.net.download;
 
 /**
  * Created by Administrator on 2016/4/5.
  */
-public abstract class OSBaseUpDownLoadPresenter {
-    protected abstract OSIUpDownLoad getOsiUpDownLoadImpl();
+public abstract class OSBaseDownLoadPresenter {
+    protected abstract OSIDownLoad getOsiDownLoadImpl();
 
-    private OSIUpDownLoad osiHttpLoader;
+    private OSIDownLoad osiHttpLoader;
 
-    public OSBaseUpDownLoadPresenter() {
-        osiHttpLoader = getOsiUpDownLoadImpl();
+    public OSBaseDownLoadPresenter() {
+        osiHttpLoader = getOsiDownLoadImpl();
     }
 
 

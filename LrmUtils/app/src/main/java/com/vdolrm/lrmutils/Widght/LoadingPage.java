@@ -31,7 +31,7 @@ public abstract class LoadingPage extends FrameLayout {
 
 	private int mState;//当前的状态，显示需要根据该状态判断
 	
-	public ClickListener clickListener = new ClickListener();
+	public RetryClickListener clickListener = new RetryClickListener();
 	
 	public abstract View createLoadedView(boolean reLoading);
 
@@ -186,15 +186,22 @@ public abstract class LoadingPage extends FrameLayout {
 	}
 
 
-	class ClickListener implements OnClickListener {
+	class RetryClickListener implements OnClickListener {
 		@Override
 		public void onClick(View v) {
 			MyLog.d("click");
-			//show(STATE_ERROR);
-			reset();
-			createLoadedView(true);
+			retry();
 		}
 		
+	}
+
+	/**
+	 * 当网络请求失败时，公开出的重试方法
+	 */
+	public void retry(){
+		//show(STATE_ERROR);
+		reset();
+		createLoadedView(true);
 	}
 
 	/**加载出错时或者为空时或者网络错误时显示的图片（暂没分开获取），先获取resid，假如为空在获取drawable,假如再为空则使用ic_launter*/

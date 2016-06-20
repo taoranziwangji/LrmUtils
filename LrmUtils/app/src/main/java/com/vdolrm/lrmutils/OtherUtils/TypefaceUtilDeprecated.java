@@ -4,7 +4,12 @@ package com.vdolrm.lrmutils.OtherUtils;
 import android.content.Context;
 import android.graphics.Typeface;
 
-public class TypefaceUtil {
+
+/**
+ * 由于加入了t1是否为空的判断，所以只适用于整个app用了一个第三方字体的情况，否则请重写方法，把name写到各个方法里
+ */
+@Deprecated
+public class TypefaceUtilDeprecated {
 
 	private static Typeface t1,t2;
 	private static Typeface t3,t4,t5;

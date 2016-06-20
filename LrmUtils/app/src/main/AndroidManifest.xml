@@ -31,14 +31,16 @@
         <activity
             android:name=".Test.TestMainActivity"
             android:theme="@style/AppTheme.NoActionBar">
-            <!--<intent-filter>
+           <!-- <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>-->
         </activity>
         <activity android:name=".Test.TestBigPicShowActivity" />
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
-        <activity android:name=".Test.TestFragmentViewPagerActivity"></activity>
+        <activity android:name=".Test.TestFragmentViewPagerActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".Test.TestUploadActivity"></activity>
     </application>
 
 </manifest>

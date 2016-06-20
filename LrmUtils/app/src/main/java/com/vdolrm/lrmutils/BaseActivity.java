@@ -13,7 +13,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         windowFeature();
         super.onCreate(savedInstanceState);
 
-        bundleInOnCreate(savedInstanceState);
 		BaseApplication.getInstance().addActivity(this);
 
 		//RefWatcher refWatcher = TestApplication.getRefWatcher(this);
@@ -23,6 +22,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 		initToolBar();
 		init();
 		initEvent();
+
+		bundleInOnCreate(savedInstanceState);
 	}
 
 	@Override

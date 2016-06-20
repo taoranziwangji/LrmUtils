@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.MediaPlayer;
-import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -27,11 +26,11 @@ import com.vdolrm.lrmutils.FileUtils.StorageUtil;
 import com.vdolrm.lrmutils.LogUtils.MyLog;
 import com.vdolrm.lrmutils.OpenSourceUtils.img.OSBaseImageLoaderPresenter;
 import com.vdolrm.lrmutils.OpenSourceUtils.img.TestImageLoaderPresenter;
+import com.vdolrm.lrmutils.OpenSourceUtils.net.download.OSIHttpDownloadCallBack;
+import com.vdolrm.lrmutils.OpenSourceUtils.net.download.TestDownLoadPresenter;
 import com.vdolrm.lrmutils.OpenSourceUtils.net.http.OSIHttpLoaderCallBack;
 import com.vdolrm.lrmutils.OpenSourceUtils.net.http.TestHttpLoaderPresenter;
 import com.vdolrm.lrmutils.OpenSourceUtils.net.http.okhttp.TestOkHttpBean;
-import com.vdolrm.lrmutils.OpenSourceUtils.net.up_downLoad.OSIHttpDownloadCallBack;
-import com.vdolrm.lrmutils.OpenSourceUtils.net.up_downLoad.TestUpDownLoadPresenter;
 import com.vdolrm.lrmutils.R;
 import com.vdolrm.lrmutils.UIUtils.UIUtils;
 
@@ -40,9 +39,13 @@ import java.util.List;
 
 //https://github.com/duzechao/DownloadManager 使用okhttp greendao 支持断点续传和暂停等功能的下载框架
 public class TestMainActivity extends BaseActivity {
-    private static final String url = "http://test.benniaoyasi.cn/api.php?appid=1&m=api&c=category&a=listcategory&pid=1&devtype=android&version=1.4.0";
+    //private static final String url = "http://test.benniaoyasi.cn/api.php?appid=1&m=api&c=category&a=listcategory&pid=1&devtype=android&version=1.4.0";
+    private static final String url = "http://testapp.benniaoyasi.com/api.php?appid=1&m=api&c=ncategory&a=listcategory&pid=1&devtype=android&version=2.0";
+   // private static final String urlOther = "http://publicobject.com/helloworld.txt";
+    private static final String urlOther = "https://api.github.com/repos/square/okhttp/contributors";
     private static final String url_testImage = "http://img.my.csdn.net/uploads/201407/26/1406383299_1976.jpg";
     private static final String url_mp3 = "http://music-zhizhi.oss-cn-beijing.aliyuncs.com/%E6%BC%82%E6%B4%8B%E8%BF%87%E6%B5%B7%E6%9D%A5%E7%9C%8B%E4%BD%A0.mp3";
+    private static final String url_baidu = "http://www.gogo-talk.com";
     private ImageView mImageView;
     private RecyclerView recyclerView;
     private OSBaseImageLoaderPresenter imageLoaderPresenter;
@@ -57,7 +60,7 @@ public class TestMainActivity extends BaseActivity {
     @Override
     public void init() {
         recyclerView = (RecyclerView) findViewById(R.id.mRecyclerView);
-        mImageView = (ImageView)findViewById(R.id.mImageView);
+        mImageView = (ImageView) findViewById(R.id.mImageView);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -78,18 +81,23 @@ public class TestMainActivity extends BaseActivity {
     @Override
     public void initEvent() {
 
+        //测试viewpager
+        Intent intent = new Intent(this,TestFragmentViewPagerActivity.class);
+        startActivity(intent);
+
+
         //测试baseMyAdapter(recyclerView)
-        testAdapter();
+        //testAdapter();
 
         //测试大图裁剪
         //Intent intent = new Intent(this,TestBigPicShowActivity.class);
         //startActivity(intent);
 
         //测试MVP模式图片加载（picasso）
-       // TestImageLoaderPresenter.getInstance(this).load(url_testImage, (ImageView) findViewById(R.id.mImageView));
+        // TestImageLoaderPresenter.getInstance(this).load(url_testImage, (ImageView) findViewById(R.id.mImageView));
 
 
-        new Thread(new Runnable() {
+       /* new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -101,49 +109,49 @@ public class TestMainActivity extends BaseActivity {
                     @Override
                     public void run() {
                         //测试fragment viewpager
-                        Intent intent = new Intent(TestMainActivity.this, TestFragmentViewPagerActivity.class);
+                        Intent intent = new Intent(TestMainActivity.this, TestUploadActivity.class);
                         UIUtils.startActivity(intent);
                     }
                 });
 
             }
-        }).start();
+        }).start();*/
 
 
-       //测试MVP模式网络请求（okhttp）
-       // testOkHttp();
+        //测试MVP模式网络请求（okhttp）
+        //testOkHttp();
+        //testOkHttpOther();
 
         //测试文件下载
         //testFileDownLoad();
     }
 
     private void testFileDownLoad() {
-       new TestUpDownLoadPresenter().download(url_mp3, StorageUtil.getExternalRootPath(), "zabc.mp3", new OSIHttpDownloadCallBack<String>() {
-           @Override
-           public void onLoading(long total, long current, boolean isUploading) {
-                MyLog.d("正在下载 total="+total+",current="+current);
-           }
+        new TestDownLoadPresenter().download(url_mp3, StorageUtil.getExternalRootPath(), "zabc.mp3", new OSIHttpDownloadCallBack<String>() {
+            @Override
+            public void onLoading(long total, long current, boolean isUploading) {
+                MyLog.d("正在下载 total=" + total + ",current=" + current);
+            }
 
 
-           @Override
-           public void onException(Exception e) {
-               MyLog.d("下载失败"+",e="+e.getMessage());
-           }
+            @Override
+            public void onException(Exception e) {
+                MyLog.d("下载失败" + ",e=" + e.getMessage());
+            }
 
 
+            @Override
+            public void onError(String errorMsg) {
+                MyLog.d("下载失败" + errorMsg);
+            }
 
-           @Override
-           public void onError(String errorMsg) {
-               MyLog.d("下载失败"+errorMsg);
-           }
-
-           @Override
-           public void onResponse(String response) {
-               MyLog.d("下载成功"+response);
-           }
+            @Override
+            public void onResponse(String strResponse,String response) {
+                MyLog.d("下载成功" + response);
+            }
 
 
-       });
+        });
     }
 
     private void testOkHttp() {
@@ -152,7 +160,7 @@ public class TestMainActivity extends BaseActivity {
 
             @Override
             public void onException(Exception e) {
-                MyLog.d("okhttp error "+",e="+e.getMessage());
+                MyLog.d("okhttp error " + ",e=" + e.getMessage());
             }
 
             @Override
@@ -162,27 +170,62 @@ public class TestMainActivity extends BaseActivity {
 
             @Override
             public void onError(String errorMsg) {
-                MyLog.d("okhttp error msg="+errorMsg);
+                MyLog.d("okhttp error msg=" + errorMsg);
             }
 
             @Override
-            public void onResponse(TestOkHttpBean response) {
-                List<TestOkHttpBean.EdataEntity> list = response.getEdata();
-                if (list != null && list.size() > 0) {
-                    for (TestOkHttpBean.EdataEntity bean : list) {
-                        MyLog.d( "okhttp gson ename" + list.indexOf(bean) + " = " + bean.getEname());
+            public void onResponse(String strResponse,TestOkHttpBean response) {
+                if (response != null) {
+                    List<TestOkHttpBean.EdataEntity> list = response.getEdata();
+                    if (list != null && list.size() > 0) {
+                        for (TestOkHttpBean.EdataEntity bean : list) {
+                            MyLog.d("okhttp gson ename" + list.indexOf(bean) + " = " + bean.getEname());
+                        }
                     }
+                } else {
+                    MyLog.d("okhttp onResponse response=" + response);
                 }
             }
         });
 
         //测试网络请求的取消
-        SystemClock.sleep(10);
-        httpLoaderPresenter.cancelRequest();
+        //SystemClock.sleep(10);
+        //httpLoaderPresenter.cancelRequest();
+    }
+
+    private void testOkHttpOther() {
+        httpLoaderPresenter = new TestHttpLoaderPresenter();
+        httpLoaderPresenter.load(urlOther, new OSIHttpLoaderCallBack<String>() {
+
+            @Override
+            public void onException(Exception e) {
+                MyLog.d("okhttp error " + ",e=" + e.getMessage());
+            }
+
+            @Override
+            public void onErrorGsonException(String response, Exception e) {
+
+            }
+
+            @Override
+            public void onError(String errorMsg) {
+                MyLog.d("okhttp error msg=" + errorMsg);
+            }
+
+            @Override
+            public void onResponse(String strResponse,String response) {
+
+                MyLog.d("okhttp onResponse response=" + response);
+
+            }
+        });
+
     }
 
 
-    /**recyclerView会自动处理回收，不用加tag也不会导致混乱*/
+    /**
+     * recyclerView会自动处理回收，不用加tag也不会导致混乱
+     */
     private void testAdapter() {
         List list = new ArrayList();
         for (int i = 0; i < 20; i++) {
@@ -211,7 +254,7 @@ public class TestMainActivity extends BaseActivity {
         });
         recyclerView.setAdapter(adapter);
         imageLoaderPresenter = TestImageLoaderPresenter.getInstance(this);
-        recyclerView.addOnScrollListener(new OnRecyclerViewScrollImageStateListener(this,imageLoaderPresenter));
+        recyclerView.addOnScrollListener(new OnRecyclerViewScrollImageStateListener(this, imageLoaderPresenter));
         //设置Item增加、移除动画 (不是初始时的动画 而是添加删除item时的动画)
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -248,8 +291,9 @@ public class TestMainActivity extends BaseActivity {
         }
     }
 
-    class MyAdapter extends BaseMyAdapter<MyBean,MyHolder> {
+    class MyAdapter extends BaseMyAdapter<MyBean, MyHolder> {
         private List<MyBean> list;
+
         public MyAdapter(Context c, List list) {
             super(c, list);
             this.list = list;
@@ -262,14 +306,13 @@ public class TestMainActivity extends BaseActivity {
         }
 
 
-
         @Override
         public MyHolder getHolder(View itemView, View itemRootView, OnRecyclerViewItemClickListener onRecyclerViewItemClickListener) {
-            return new MyHolder(itemView,itemRootView,onRecyclerViewItemClickListener);
+            return new MyHolder(itemView, itemRootView, onRecyclerViewItemClickListener);
         }
 
         @Override
-        public void onBind(final int position, final MyBean bean, View itemRootView,MyHolder holder) {
+        public void onBind(final int position, final MyBean bean, View itemRootView, MyHolder holder) {
             //TextView tv_test = (TextView) itemRootView.findViewById(R.id.tv_test);
             //Button btn_play = (Button) itemRootView.findViewById(R.id.btn_play);
 
@@ -281,8 +324,8 @@ public class TestMainActivity extends BaseActivity {
                 public void onClick(View v) {
                     MyLog.d("mp=" + bean.getMediaPlayer());
 
-                    for(int i=0;i<list.size();i++){
-                        if(i!=position) {//pause两次再start一次可能播放不了
+                    for (int i = 0; i < list.size(); i++) {
+                        if (i != position) {//pause两次再start一次可能播放不了
                             MediaPlayer mp = list.get(i).getMediaPlayer();
                             if (mp != null && mp.isPlaying()) {
                                 mp.pause();
@@ -290,7 +333,7 @@ public class TestMainActivity extends BaseActivity {
                                 mp.release();
                                 mp = null;
                                 list.get(i).setMediaPlayer(null);
-                                MyLog.d("释放"+list.get(i).getMediaPlayer());
+                                MyLog.d("释放" + list.get(i).getMediaPlayer());
                             }
                         }
                     }
@@ -311,13 +354,13 @@ public class TestMainActivity extends BaseActivity {
                         }
                     }
 
-                    if(bean.getMediaPlayer()!=null) {
+                    if (bean.getMediaPlayer() != null) {
                         if (bean.getMediaPlayer().isPlaying()) {
                             bean.getMediaPlayer().pause();
                             MyLog.d("pause");
                         } else {
                             bean.getMediaPlayer().start();
-                            MyLog.d("start"+position);
+                            MyLog.d("start" + position);
                         }
                     }
                 }
@@ -328,7 +371,7 @@ public class TestMainActivity extends BaseActivity {
     }
 
 
-    class MyHolder extends BaseViewHolder{
+    class MyHolder extends BaseViewHolder {
 
         TextView tv_test;
         Button btn_play;
@@ -344,9 +387,9 @@ public class TestMainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-       if(imageLoaderPresenter!=null){
-           imageLoaderPresenter.cancelTag(this);
-       }
+        if (imageLoaderPresenter != null) {
+            imageLoaderPresenter.cancelTag(this);
+        }
 
         TestApplication.getInstance().exit(this);
     }
