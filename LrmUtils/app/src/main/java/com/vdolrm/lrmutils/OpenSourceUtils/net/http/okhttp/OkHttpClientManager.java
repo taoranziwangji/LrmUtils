@@ -48,6 +48,7 @@ public class OkHttpClientManager {
 
 
     private static final String TAG = "OkHttpClientManager";
+    public static final MediaType JSON=MediaType.parse("application/json;charset=utf-8");
 
     //lrm test cache
     private static final Interceptor REWRITE_CACHE_CONTROL_INTERCEPTOR = new Interceptor() {
@@ -188,6 +189,18 @@ public class OkHttpClientManager {
     private void _postAsyn(String url, final OSIHttpLoaderCallBack callback, Map<String, String> params) {
         Param[] paramsArr = map2Params(params);
         Request request = buildPostRequest(url, paramsArr);
+        deliveryResult(callback, request);
+    }
+
+    /**
+     * 异步的post请求 raw
+     *
+     * @param url
+     * @param callback
+     * @param json
+     */
+    private void _postAsynRaw(String url, final OSIHttpLoaderCallBack callback, String json) {
+        Request request = buildPostRequestRaw(url, json);
         deliveryResult(callback, request);
     }
 
@@ -475,6 +488,17 @@ public class OkHttpClientManager {
      */
     public static void postAsyn(String url, final OSIHttpLoaderCallBack callback, Map<String, String> params) {
         getInstance()._postAsyn(url, callback, params);
+    }
+
+    /**
+     * 异步的post请求raw
+     *
+     * @param url
+     * @param callback
+     * @param json
+     */
+    public static void postAsynRaw(String url, final OSIHttpLoaderCallBack callback, String json) {
+        getInstance()._postAsynRaw(url, callback, json);
     }
 
 
@@ -767,6 +791,17 @@ public class OkHttpClientManager {
         }
         RequestBody requestBody = builder.build();
         return new Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build();
+    }
+
+    private Request buildPostRequestRaw(String url, String json) {
+
+        //创建一个RequestBody(参数1：数据类型 参数2传递的json串)
+        RequestBody requestBody = RequestBody.create(JSON, json);
+        //创建一个请求对象
+        return  new Request.Builder()
                 .url(url)
                 .post(requestBody)
                 .build();

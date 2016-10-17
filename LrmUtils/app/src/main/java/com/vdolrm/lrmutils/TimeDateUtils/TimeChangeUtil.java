@@ -1,5 +1,7 @@
 package com.vdolrm.lrmutils.TimeDateUtils;
 
+import android.text.TextUtils;
+
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -297,6 +299,56 @@ public class TimeChangeUtil {
     }
 
 
+    /**
+     * 返回这个日期所在的年
+     * @param date yyyy-MM-dd
+     * @return
+     */
+    public static String getYearFromOneDate(String date){
+        if(TextUtils.isEmpty(date))
+            return "";
+        if(date.contains("-")){
+            String[] split = date.split("-");
+            if(split!=null && split.length>0){
+                return split[0];
+            }
+        }
+        return "";
+    }
+
+    /**
+     * 返回这个日期所在的月
+     * @param date yyyy-MM-dd
+     * @return
+     */
+    public static String getMonthFromOneDate(String date){
+        if(TextUtils.isEmpty(date))
+            return "";
+        if(date.contains("-")){
+            String[] split = date.split("-");
+            if(split!=null && split.length>1){
+                return split[1];
+            }
+        }
+        return "";
+    }
+
+    /**
+     * 返回这个日期所在的日
+     * @param date yyyy-MM-dd
+     * @return
+     */
+    public static String getDayFromOneDate(String date){
+        if(TextUtils.isEmpty(date))
+            return "";
+        if(date.contains("-")){
+            String[] split = date.split("-");
+            if(split!=null && split.length>2){
+                return split[2];
+            }
+        }
+        return "";
+    }
 
 
 }

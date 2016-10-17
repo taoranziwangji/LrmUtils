@@ -70,14 +70,32 @@ public class UIUtils {
 		getHandler().removeCallbacks(runnable);
 	}
 
+	/**
+	 * 废弃，配合butterknife使用时会莫名其妙崩溃，用原生的LayoutInflater.from(context).inflate(R.layout.xx,null);替代
+	 * @param resId
+	 * @return
+	 */
+	@Deprecated
 	public static View inflate(int resId){
 		return inflate(resId,null);
 	}
 
+	/**
+	 * 废弃，配合butterknife使用时会莫名其妙崩溃，用原生的LayoutInflater.from(context).inflate(R.layout.xx,null);替代
+	 * @param resId
+	 * @return
+	 */
+	@Deprecated
 	public static View inflate(int resId,ViewGroup root){
 		return inflate(resId, root,false);
 	}
 
+	/**
+	 * 废弃，配合butterknife使用时会莫名其妙崩溃，用原生的LayoutInflater.from(context).inflate(R.layout.xx,null);替代
+	 * @param resId
+	 * @return
+	 */
+	@Deprecated
 	public static View inflate(int resId,ViewGroup root,boolean attachToRoot){
 		return LayoutInflater.from(getContext()).inflate(resId,root,attachToRoot);
 	}
@@ -97,7 +115,7 @@ public class UIUtils {
 		return getResources().getStringArray(resId);
 	}
 
-	/** 获取dimen */
+	/** 获取dimen（px） */
 	public static int getDimens(int resId) {
 		return getResources().getDimensionPixelSize(resId);
 	}

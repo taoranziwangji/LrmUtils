@@ -1,7 +1,6 @@
 package com.vdolrm.lrmutils.Test;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.MediaPlayer;
@@ -82,8 +81,8 @@ public class TestMainActivity extends BaseActivity {
     public void initEvent() {
 
         //测试viewpager
-        Intent intent = new Intent(this,TestFragmentViewPagerActivity.class);
-        startActivity(intent);
+        //Intent intent = new Intent(this,TestFragmentViewPagerActivity.class);
+        //startActivity(intent);
 
 
         //测试baseMyAdapter(recyclerView)
@@ -124,6 +123,26 @@ public class TestMainActivity extends BaseActivity {
 
         //测试文件下载
         //testFileDownLoad();
+
+        //测试okhttp raw传输json
+        String url = "http://139.129.203.213/front/api/user/register";
+        String json = "{\n" +
+                "    \"head\": {\n" +
+                "        \"uid\": \"\",\n" +
+                "        \"plat\": \"android\",\n" +
+                "        \"st\": \"\",\n" +
+                "        \"ver\": \"1.0\",\n" +
+                "        \"imei\": \"869130020315334\",\n" +
+                "        \"oc\": \"869130020315334\",\n" +
+                "        \"tid\": \"\"\n" +
+                "    },\n" +
+                "    \"body\": {\n" +
+                "        \"uname\": \"lrmname\",\n" +
+                "        \"password\": \"lrmpassword\"\n" +
+                "    }\n" +
+                "}";
+        //testRawJsonPost4Okhttp(url,json);
+
     }
 
     private void testFileDownLoad() {
@@ -219,6 +238,35 @@ public class TestMainActivity extends BaseActivity {
 
             }
         });
+
+    }
+
+    private void testRawJsonPost4Okhttp(String url,String json) {
+        httpLoaderPresenter = new TestHttpLoaderPresenter();
+        httpLoaderPresenter.postAsyncRaw(url, new OSIHttpLoaderCallBack<String>() {
+
+            @Override
+            public void onException(Exception e) {
+                MyLog.d("okhttp error " + ",e=" + e.getMessage());
+            }
+
+            @Override
+            public void onErrorGsonException(String response, Exception e) {
+
+            }
+
+            @Override
+            public void onError(String errorMsg) {
+                MyLog.d("okhttp error msg=" + errorMsg);
+            }
+
+            @Override
+            public void onResponse(String strResponse,String response) {
+
+                MyLog.d("okhttp onResponse response=" + response);
+
+            }
+        },json);
 
     }
 

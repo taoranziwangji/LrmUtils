@@ -48,4 +48,15 @@ public abstract class OSBaseHttpLoaderPresenter {
             osiHttpLoader.postAsync(url, callBack, params);
         }
     }
+
+    /**post异步 raw
+     * @param url
+     * @param callBack
+     * @param json
+     */
+    public void postAsyncRaw(String url, OSIHttpLoaderCallBack callBack, String json) {
+        if (osiHttpLoader != null) {
+            osiHttpLoader.postAsyncRaw(url, callBack, json);
+        }
+    }
 }

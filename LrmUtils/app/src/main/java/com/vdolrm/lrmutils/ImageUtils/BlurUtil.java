@@ -10,7 +10,10 @@ import android.renderscript.ScriptIntrinsicBlur;
 
 /**
  * 图片模糊工具
+ * 废弃，某些图片会显示花斑 建议用 高斯模糊(https://github.com/Commit451/NativeStackBlur)代替，ex:Bitmap bm = NativeStackBlur.process(bitmap, 24);
+    imv_bg.setImageBitmap(bm);
  */
+@Deprecated
 public class BlurUtil {
 
     private static final int DEFAULT_BLUR_RADIUS = 10;

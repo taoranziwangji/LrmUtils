@@ -33,8 +33,19 @@ public class TestOkHttpImpl implements OSIHttpLoader {
      * @param callBack
      * @param params
      */
+    @Override
     public void postAsync(String url, OSIHttpLoaderCallBack callBack, Map<String, String> params) {
 
         OkHttpClientManager.postAsyn(url, callBack, params);
+    }
+
+    /**
+     * @param url
+     * @param callBack
+     * @param json
+     */
+    @Override
+    public void postAsyncRaw(String url, OSIHttpLoaderCallBack callBack, String json) {
+        OkHttpClientManager.postAsynRaw(url, callBack, json);
     }
 }
