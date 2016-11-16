@@ -1,6 +1,7 @@
 package com.vdolrm.lrmutils.Test;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.MediaPlayer;
@@ -142,6 +143,10 @@ public class TestMainActivity extends BaseActivity {
                 "    }\n" +
                 "}";
         //testRawJsonPost4Okhttp(url,json);
+
+        //测试Android与JS交互
+        Intent in_js = new Intent(this,TestJaveJSActivity.class);
+        startActivity(in_js);
 
     }
 

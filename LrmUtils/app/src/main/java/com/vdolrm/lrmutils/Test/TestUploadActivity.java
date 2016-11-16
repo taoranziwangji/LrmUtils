@@ -51,6 +51,6 @@ public class TestUploadActivity extends AppCompatActivity {
             public void onResponse(String strResponse,String response) {
                 MyLog.d(TAG_NET,"response="+response);
             }
-        },file,fileKey);
+        },file,fileKey,null);
     }
 }
