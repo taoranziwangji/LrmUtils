@@ -59,4 +59,15 @@ public abstract class OSBaseHttpLoaderPresenter {
             osiHttpLoader.postAsyncRaw(url, callBack, json);
         }
     }
+
+    /**delete异步
+     * @param url
+     * @param callBack
+     * @param params
+     */
+    public void deleteAsync(String url, OSIHttpLoaderCallBack callBack, Map<String, String> params) {
+        if (osiHttpLoader != null) {
+            osiHttpLoader.deleteAsync(url, callBack, params);
+        }
+    }
 }

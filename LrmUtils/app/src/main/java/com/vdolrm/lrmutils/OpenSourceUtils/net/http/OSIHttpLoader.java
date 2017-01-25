@@ -11,4 +11,5 @@ public interface OSIHttpLoader {
 
     void postAsync(String url, OSIHttpLoaderCallBack callBack, Map<String, String> params);
     void postAsyncRaw(String url, OSIHttpLoaderCallBack callBack, String json);
+    void deleteAsync(String url, OSIHttpLoaderCallBack callBack, Map<String, String> params);
 }

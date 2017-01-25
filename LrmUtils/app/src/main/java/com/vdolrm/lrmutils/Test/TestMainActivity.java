@@ -1,7 +1,6 @@
 package com.vdolrm.lrmutils.Test;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.MediaPlayer;
@@ -31,11 +30,16 @@ import com.vdolrm.lrmutils.OpenSourceUtils.net.download.TestDownLoadPresenter;
 import com.vdolrm.lrmutils.OpenSourceUtils.net.http.OSIHttpLoaderCallBack;
 import com.vdolrm.lrmutils.OpenSourceUtils.net.http.TestHttpLoaderPresenter;
 import com.vdolrm.lrmutils.OpenSourceUtils.net.http.okhttp.TestOkHttpBean;
+import com.vdolrm.lrmutils.OtherUtils.MapJsonUtil;
 import com.vdolrm.lrmutils.R;
 import com.vdolrm.lrmutils.UIUtils.UIUtils;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //https://github.com/duzechao/DownloadManager 使用okhttp greendao 支持断点续传和暂停等功能的下载框架
 public class TestMainActivity extends BaseActivity {
@@ -145,8 +149,28 @@ public class TestMainActivity extends BaseActivity {
         //testRawJsonPost4Okhttp(url,json);
 
         //测试Android与JS交互
-        Intent in_js = new Intent(this,TestJaveJSActivity.class);
-        startActivity(in_js);
+        //Intent in_js = new Intent(this,TestJaveJSActivity.class);
+        //startActivity(in_js);
+
+        //测试okhttp的delete方法
+        String url_delete = "https://app.wurener.com/v3/delete_address.json";
+        Map<String,String> map_delete = new HashMap<>();
+        map_delete.put("uid", "3037");
+        map_delete.put("address_id", "1586");
+        map_delete.put("app_key", "family_app");
+        map_delete.put("from_client", "Android");
+        map_delete.put("app_version", "3.0.8");
+        map_delete.put("sign", "965eb77b219ad2187c60e5fcf93e85c6");
+        //testDeleteAsync4Okhttp(url_delete,map_delete);
+
+        //测试map与jsonObject相互转换工具类
+        JSONObject jsonObject = MapJsonUtil.map2JsonObject(map_delete);
+        MyLog.d("json="+jsonObject);
+        HashMap<String, String> stringStringHashMap = MapJsonUtil.jsonObject2Map(jsonObject);
+        MyLog.d("map="+stringStringHashMap);
+
+
+
 
     }
 
@@ -272,6 +296,36 @@ public class TestMainActivity extends BaseActivity {
 
             }
         },json);
+
+    }
+
+
+    private void testDeleteAsync4Okhttp(String url,Map<String,String> map) {
+        httpLoaderPresenter = new TestHttpLoaderPresenter();
+        httpLoaderPresenter.deleteAsync(url, new OSIHttpLoaderCallBack<String>() {
+
+            @Override
+            public void onException(Exception e) {
+                MyLog.d("okhttp error " + ",e=" + e.getMessage());
+            }
+
+            @Override
+            public void onErrorGsonException(String response, Exception e) {
+
+            }
+
+            @Override
+            public void onError(String errorMsg) {
+                MyLog.d("okhttp error msg=" + errorMsg);
+            }
+
+            @Override
+            public void onResponse(String strResponse,String response) {
+
+                MyLog.d("okhttp onResponse response=" + response);
+
+            }
+        },map);
 
     }
 
