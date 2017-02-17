@@ -71,7 +71,7 @@ public abstract class OSBaseHttpLoaderPresenter {
         }
     }
 
-    /**delete异步
+    /**put异步
      * @param url
      * @param callBack
      * @param params
