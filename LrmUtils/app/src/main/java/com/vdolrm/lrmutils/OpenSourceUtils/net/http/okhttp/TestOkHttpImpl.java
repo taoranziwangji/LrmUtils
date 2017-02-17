@@ -53,4 +53,9 @@ public class TestOkHttpImpl implements OSIHttpLoader {
     public void deleteAsync(String url, OSIHttpLoaderCallBack callBack, Map<String, String> params) {
         OkHttpClientManager.deleteAsyn(url,callBack,params);
     }
+
+    @Override
+    public void putAsync(String url, OSIHttpLoaderCallBack callBack, Map<String, String> params) {
+        OkHttpClientManager.putAsyn(url,callBack,params);
+    }
 }

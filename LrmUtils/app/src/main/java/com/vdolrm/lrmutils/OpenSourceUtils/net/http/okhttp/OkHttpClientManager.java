@@ -218,6 +218,19 @@ public class OkHttpClientManager {
     }
 
     /**
+     * 异步的delete请求
+     *
+     * @param url
+     * @param callback
+     * @param params
+     */
+    private void _putAsyn(String url, final OSIHttpLoaderCallBack callback, Map<String, String> params) {
+        Param[] paramsArr = map2Params(params);
+        Request request = buildPutRequest(url, paramsArr);
+        deliveryResult(callback, request);
+    }
+
+    /**
      * 同步基于post的文件上传
      *
      * @param params
@@ -523,6 +536,17 @@ public class OkHttpClientManager {
      */
     public static void deleteAsyn(String url, final OSIHttpLoaderCallBack callback, Map<String, String> params) {
         getInstance()._deleteAsyn(url, callback, params);
+    }
+
+    /**
+     * 异步的put请求
+     *
+     * @param url
+     * @param callback
+     * @param params
+     */
+    public static void putAsyn(String url, final OSIHttpLoaderCallBack callback, Map<String, String> params) {
+        getInstance()._putAsyn(url, callback, params);
     }
 
 
@@ -843,6 +867,21 @@ public class OkHttpClientManager {
         return new Request.Builder()
                 .url(url)
                 .delete(requestBody)
+                .build();
+    }
+
+    private Request buildPutRequest(String url, Param[] params) {
+        if (params == null) {
+            params = new Param[0];
+        }
+        FormBody.Builder builder = new FormBody.Builder();
+        for (Param param : params) {
+            builder.add(param.key, param.value);
+        }
+        RequestBody requestBody = builder.build();
+        return new Request.Builder()
+                .url(url)
+                .put(requestBody)
                 .build();
     }
 
