@@ -4,10 +4,18 @@ import android.util.Log;
 
 public class MyLog {
     private static final String TAG = "lrmutils";
-    public static final boolean DEBUG = true;
+    private static boolean DEBUG = true;
 
 
     private MyLog() {
+    }
+
+    public static boolean isDEBUG() {
+        return DEBUG;
+    }
+
+    public static void setDEBUG(boolean DEBUG) {
+        MyLog.DEBUG = DEBUG;
     }
 
     public static void d(String msg) {

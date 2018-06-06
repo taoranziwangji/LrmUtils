@@ -204,7 +204,7 @@ public class TestMainActivity extends BaseActivity {
 
     private void testOkHttp() {
         httpLoaderPresenter = new TestHttpLoaderPresenter();
-        httpLoaderPresenter.load(url, new OSIHttpLoaderCallBack<TestOkHttpBean>() {
+        httpLoaderPresenter.getAsync("test",url, new OSIHttpLoaderCallBack<TestOkHttpBean>() {
 
             @Override
             public void onException(Exception e) {
@@ -243,7 +243,7 @@ public class TestMainActivity extends BaseActivity {
 
     private void testOkHttpOther() {
         httpLoaderPresenter = new TestHttpLoaderPresenter();
-        httpLoaderPresenter.load(urlOther, new OSIHttpLoaderCallBack<String>() {
+        httpLoaderPresenter.getAsync("test",urlOther, new OSIHttpLoaderCallBack<String>() {
 
             @Override
             public void onException(Exception e) {
@@ -272,7 +272,7 @@ public class TestMainActivity extends BaseActivity {
 
     private void testRawJsonPost4Okhttp(String url,String json) {
         httpLoaderPresenter = new TestHttpLoaderPresenter();
-        httpLoaderPresenter.postAsyncRaw(url, new OSIHttpLoaderCallBack<String>() {
+        httpLoaderPresenter.postAsyncRaw("test",url, new OSIHttpLoaderCallBack<String>() {
 
             @Override
             public void onException(Exception e) {
@@ -302,7 +302,7 @@ public class TestMainActivity extends BaseActivity {
 
     private void testDeleteAsync4Okhttp(String url,Map<String,String> map) {
         httpLoaderPresenter = new TestHttpLoaderPresenter();
-        httpLoaderPresenter.deleteAsync(url, new OSIHttpLoaderCallBack<String>() {
+        httpLoaderPresenter.deleteAsync("test",url, new OSIHttpLoaderCallBack<String>() {
 
             @Override
             public void onException(Exception e) {
