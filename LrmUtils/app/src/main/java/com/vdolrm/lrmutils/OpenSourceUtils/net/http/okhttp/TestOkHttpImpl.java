@@ -15,8 +15,8 @@ public class TestOkHttpImpl implements OSIHttpLoader {
     private Call call;
 
     @Override
-    public void getAsync(String flag, String url, OSIHttpLoaderCallBack callBack) {
-        call = OkHttpClientManager.getAsyn(url, callBack);
+    public void getAsync(String flag, String url, OSIHttpLoaderCallBack callBack, Map<String, String> headers) {
+        call = OkHttpClientManager.getAsyn(url, callBack, headers);
     }
 
     @Override
@@ -34,9 +34,9 @@ public class TestOkHttpImpl implements OSIHttpLoader {
      * @param params
      */
     @Override
-    public void postAsync(String flag, String url, OSIHttpLoaderCallBack callBack, Map<String, String> params) {
+    public void postAsync(String flag, String url, OSIHttpLoaderCallBack callBack, Map<String, String> params, Map<String, String> headers) {
 
-        OkHttpClientManager.postAsyn(url, callBack, params);
+        OkHttpClientManager.postAsyn(url, callBack, params, headers);
     }
 
     /**
@@ -45,17 +45,17 @@ public class TestOkHttpImpl implements OSIHttpLoader {
      * @param json
      */
     @Override
-    public void postAsyncRaw(String flag, String url, OSIHttpLoaderCallBack callBack, String json) {
-        OkHttpClientManager.postAsynRaw(url, callBack, json);
+    public void postAsyncRaw(String flag, String url, OSIHttpLoaderCallBack callBack, String json, Map<String, String> headers) {
+        OkHttpClientManager.postAsynRaw(url, callBack, json, headers);
     }
 
     @Override
-    public void deleteAsync(String flag, String url, OSIHttpLoaderCallBack callBack, Map<String, String> params) {
-        OkHttpClientManager.deleteAsyn(url,callBack,params);
+    public void deleteAsync(String flag, String url, OSIHttpLoaderCallBack callBack, Map<String, String> params, Map<String, String> headers) {
+        OkHttpClientManager.deleteAsyn(url,callBack,params,headers);
     }
 
     @Override
-    public void putAsync(String flag, String url, OSIHttpLoaderCallBack callBack, Map<String, String> params) {
-        OkHttpClientManager.putAsyn(url,callBack,params);
+    public void putAsync(String flag, String url, OSIHttpLoaderCallBack callBack, Map<String, String> params, Map<String, String> headers) {
+        OkHttpClientManager.putAsyn(url,callBack,params,headers);
     }
 }

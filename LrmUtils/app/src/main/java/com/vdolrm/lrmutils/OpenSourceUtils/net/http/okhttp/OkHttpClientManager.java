@@ -1,10 +1,7 @@
 package com.vdolrm.lrmutils.OpenSourceUtils.net.http.okhttp;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
-import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.vdolrm.lrmutils.NetUtils.NetCheckUtil;
@@ -128,15 +125,17 @@ public class OkHttpClientManager {
      * @param url
      * @param callback
      */
-    private Call _getAsyn(String url, final OSIHttpLoaderCallBack callback) {
-        final Request request = new Request.Builder()
+    private Call _getAsyn(String url, final OSIHttpLoaderCallBack callback, Map<String, String> headers) {
+        /*final Request request = new Request.Builder()
                 .url(url)
-//根据业务服务器的配置来定，笨鸟服务器返回的接口没让缓存
-//                .cacheControl(new CacheControl.Builder()
-//                        .maxAge(1, TimeUnit.DAYS)
-//                        .maxStale(1, TimeUnit.DAYS)
-//                        .build())
-                .build();
+            //  .cacheControl(new CacheControl.Builder()//根据业务服务器的配置来定，笨鸟服务器返回的接口没让缓存
+            //  .maxAge(1, TimeUnit.DAYS)
+            //  .maxStale(1, TimeUnit.DAYS)
+                .build();*/
+
+        Param[] headersArr = map2Params(headers);
+        Request request = buildGetRequest(url,headersArr);
+
         return deliveryResult(callback, request);
     }
 
@@ -148,8 +147,9 @@ public class OkHttpClientManager {
      * @param params post的参数
      * @return
      */
-    private Response _post(String url, Param... params) throws IOException {
-        Request request = buildPostRequest(url, params);
+    private Response _post(String url, Map<String, String> params, Param... headers) throws IOException {
+        Param[] paramsArr = map2Params(params);
+        Request request = buildPostRequest(url, paramsArr, headers);
         Response response = mOkHttpClient.newCall(request).execute();
         return response;
     }
@@ -162,8 +162,8 @@ public class OkHttpClientManager {
      * @param params post的参数
      * @return 字符串
      */
-    private String _postAsString(String url, Param... params) throws IOException {
-        Response response = _post(url, params);
+    private String _postAsString(String url, Map<String, String> params, Param... headers) throws IOException {
+        Response response = _post(url, params, headers);
         return response.body().string();
     }
 
@@ -174,21 +174,10 @@ public class OkHttpClientManager {
      * @param callback
      * @param params
      */
-    private void _postAsyn(String url, final OSIHttpLoaderCallBack callback, Param... params) {
-        Request request = buildPostRequest(url, params);
-        deliveryResult(callback, request);
-    }
-
-    /**
-     * 异步的post请求
-     *
-     * @param url
-     * @param callback
-     * @param params
-     */
-    private void _postAsyn(String url, final OSIHttpLoaderCallBack callback, Map<String, String> params) {
+    private void _postAsyn(String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, Map<String, String> headers) {
         Param[] paramsArr = map2Params(params);
-        Request request = buildPostRequest(url, paramsArr);
+        Param[] headersArr = map2Params(headers);
+        Request request = buildPostRequest(url, paramsArr,headersArr);
         deliveryResult(callback, request);
     }
 
@@ -199,8 +188,9 @@ public class OkHttpClientManager {
      * @param callback
      * @param json
      */
-    private void _postAsynRaw(String url, final OSIHttpLoaderCallBack callback, String json) {
-        Request request = buildPostRequestRaw(url, json);
+    private void _postAsynRaw(String url, final OSIHttpLoaderCallBack callback, String json, Map<String, String> headers) {
+        Param[] headersArr = map2Params(headers);
+        Request request = buildPostRequestRaw(url, json, headersArr);
         deliveryResult(callback, request);
     }
 
@@ -211,22 +201,24 @@ public class OkHttpClientManager {
      * @param callback
      * @param params
      */
-    private void _deleteAsyn(String url, final OSIHttpLoaderCallBack callback, Map<String, String> params) {
+    private void _deleteAsyn(String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, Map<String, String> headers) {
         Param[] paramsArr = map2Params(params);
-        Request request = buildDeleteRequest(url, paramsArr);
+        Param[] headersArr = map2Params(headers);
+        Request request = buildDeleteRequest(url, paramsArr, headersArr);
         deliveryResult(callback, request);
     }
 
     /**
-     * 异步的delete请求
+     * 异步的put请求
      *
      * @param url
      * @param callback
      * @param params
      */
-    private void _putAsyn(String url, final OSIHttpLoaderCallBack callback, Map<String, String> params) {
+    private void _putAsyn(String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, Map<String, String> headers) {
         Param[] paramsArr = map2Params(params);
-        Request request = buildPutRequest(url, paramsArr);
+        Param[] headersArr = map2Params(headers);
+        Request request = buildPutRequest(url, paramsArr, headersArr);
         deliveryResult(callback, request);
     }
 
@@ -236,8 +228,9 @@ public class OkHttpClientManager {
      * @param params
      * @return
      */
-    private Response _post(String url, File[] files, String[] fileKeys, Param... params) throws IOException {
-        Request request = buildMultipartFormRequest(url, files, fileKeys, params);
+    private Response _post(String url, File[] files, String[] fileKeys, Map<String, String> params) throws IOException {
+        Param[] paramsArr = map2Params(params);
+        Request request = buildMultipartFormRequest(url, files, fileKeys, paramsArr);
         return mOkHttpClient.newCall(request).execute();
     }
 
@@ -246,8 +239,9 @@ public class OkHttpClientManager {
         return mOkHttpClient.newCall(request).execute();
     }
 
-    private Response _post(String url, File file, String fileKey, Param... params) throws IOException {
-        Request request = buildMultipartFormRequest(url, new File[]{file}, new String[]{fileKey}, params);
+    private Response _post(String url, File file, String fileKey, Map<String, String> params) throws IOException {
+        Param[] paramsArr = map2Params(params);
+        Request request = buildMultipartFormRequest(url, new File[]{file}, new String[]{fileKey}, paramsArr);
         return mOkHttpClient.newCall(request).execute();
     }
 
@@ -260,8 +254,9 @@ public class OkHttpClientManager {
      * @param fileKeys
      * @throws IOException
      */
-    private void _postAsyn(String url, OSIHttpLoaderCallBack callback, File[] files, String[] fileKeys, Param... params) throws IOException {
-        Request request = buildMultipartFormRequest(url, files, fileKeys, params);
+    private void _postAsyn(String url, OSIHttpLoaderCallBack callback, File[] files, String[] fileKeys, Map<String, String> params) throws IOException {
+        Param[] paramsArr = map2Params(params);
+        Request request = buildMultipartFormRequest(url, files, fileKeys, paramsArr);
         deliveryResult(callback, request);
     }
 
@@ -289,8 +284,9 @@ public class OkHttpClientManager {
      * @param params
      * @throws IOException
      */
-    private void _postAsyn(String url, OSIHttpLoaderCallBack callback, File file, String fileKey, Param... params) throws IOException {
-        Request request = buildMultipartFormRequest(url, new File[]{file}, new String[]{fileKey}, params);
+    private void _postAsyn(String url, OSIHttpLoaderCallBack callback, File file, String fileKey, Map<String, String> params) throws IOException {
+        Param[] paramsArr = map2Params(params);
+        Request request = buildMultipartFormRequest(url, new File[]{file}, new String[]{fileKey}, paramsArr);
         deliveryResult(callback, request);
     }
 
@@ -368,74 +364,6 @@ public class OkHttpClientManager {
         return (separatorIndex < 0) ? path : path.substring(separatorIndex + 1, path.length());
     }
 
-    /**
-     * 加载图片
-     *
-     * @param view
-     * @param url
-     * @throws IOException
-     */
-    private void _displayImage(final ImageView view, final String url, final int errorResId) {
-        final Request request = new Request.Builder()
-                .url(url)
-                .build();
-        Call call = mOkHttpClient.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                setErrorResId(view, errorResId);
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) {
-                InputStream is = null;
-                try {
-                    is = response.body().byteStream();
-                    OkHttpClientManagerImageUtils.ImageSize actualImageSize = OkHttpClientManagerImageUtils.getImageSize(is);
-                    OkHttpClientManagerImageUtils.ImageSize imageViewSize = OkHttpClientManagerImageUtils.getImageViewSize(view);
-                    int inSampleSize = OkHttpClientManagerImageUtils.calculateInSampleSize(actualImageSize, imageViewSize);
-                    try {
-                        is.reset();
-                    } catch (IOException e) {
-                        response = _getAsyn(url);
-                        is = response.body().byteStream();
-                    }
-
-                    BitmapFactory.Options ops = new BitmapFactory.Options();
-                    ops.inJustDecodeBounds = false;
-                    ops.inSampleSize = inSampleSize;
-                    final Bitmap bm = BitmapFactory.decodeStream(is, null, ops);
-                    mDelivery.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            view.setImageBitmap(bm);
-                        }
-                    });
-                } catch (Exception e) {
-                    setErrorResId(view, errorResId);
-
-                } finally {
-                    if (is != null) try {
-                        is.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-
-
-    }
-
-    private void setErrorResId(final ImageView view, final int errorResId) {
-        mDelivery.post(new Runnable() {
-            @Override
-            public void run() {
-                view.setImageResource(errorResId);
-            }
-        });
-    }
-
 
     //*************对外公布的方法************
 
@@ -467,8 +395,8 @@ public class OkHttpClientManager {
      * @param url
      * @param callback
      */
-    public static Call getAsyn(String url, OSIHttpLoaderCallBack callback) {
-        return getInstance()._getAsyn(url, callback);
+    public static Call getAsyn(String url, OSIHttpLoaderCallBack callback, Map<String, String> headers) {
+        return getInstance()._getAsyn(url, callback, headers);
     }
 
     /**
@@ -478,8 +406,8 @@ public class OkHttpClientManager {
      * @param params post的参数
      * @return
      */
-    public static Response post(String url, Param... params) throws IOException {
-        return getInstance()._post(url, params);
+    public static Response post(String url, Map<String, String> params, Param... headers) throws IOException {
+        return getInstance()._post(url, params, headers);
     }
 
     /**
@@ -489,19 +417,8 @@ public class OkHttpClientManager {
      * @param params post的参数
      * @return 字符串
      */
-    public static String postAsString(String url, Param... params) throws IOException {
-        return getInstance()._postAsString(url, params);
-    }
-
-    /**
-     * 异步的post请求
-     *
-     * @param url
-     * @param callback
-     * @param params
-     */
-    public static void postAsyn(String url, final OSIHttpLoaderCallBack callback, Param... params) {
-        getInstance()._postAsyn(url, callback, params);
+    public static String postAsString(String url, Map<String, String> params, Param... headers) throws IOException {
+        return getInstance()._postAsString(url, params, headers);
     }
 
 
@@ -512,8 +429,8 @@ public class OkHttpClientManager {
      * @param callback
      * @param params
      */
-    public static void postAsyn(String url, final OSIHttpLoaderCallBack callback, Map<String, String> params) {
-        getInstance()._postAsyn(url, callback, params);
+    public static void postAsyn(String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, Map<String, String> headers) {
+        getInstance()._postAsyn(url, callback, params, headers);
     }
 
     /**
@@ -523,8 +440,8 @@ public class OkHttpClientManager {
      * @param callback
      * @param json
      */
-    public static void postAsynRaw(String url, final OSIHttpLoaderCallBack callback, String json) {
-        getInstance()._postAsynRaw(url, callback, json);
+    public static void postAsynRaw(String url, final OSIHttpLoaderCallBack callback, String json, Map<String, String> headers) {
+        getInstance()._postAsynRaw(url, callback, json, headers);
     }
 
     /**
@@ -534,8 +451,8 @@ public class OkHttpClientManager {
      * @param callback
      * @param params
      */
-    public static void deleteAsyn(String url, final OSIHttpLoaderCallBack callback, Map<String, String> params) {
-        getInstance()._deleteAsyn(url, callback, params);
+    public static void deleteAsyn(String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, Map<String, String> headers) {
+        getInstance()._deleteAsyn(url, callback, params, headers);
     }
 
     /**
@@ -545,8 +462,8 @@ public class OkHttpClientManager {
      * @param callback
      * @param params
      */
-    public static void putAsyn(String url, final OSIHttpLoaderCallBack callback, Map<String, String> params) {
-        getInstance()._putAsyn(url, callback, params);
+    public static void putAsyn(String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, Map<String, String> headers) {
+        getInstance()._putAsyn(url, callback, params, headers);
     }
 
 
@@ -556,7 +473,7 @@ public class OkHttpClientManager {
      * @param params
      * @return
      */
-    public static Response post(String url, File[] files, String[] fileKeys, Param... params) throws IOException {
+    public static Response post(String url, File[] files, String[] fileKeys, Map<String, String> params) throws IOException {
         return getInstance()._post(url, files, fileKeys, params);
     }
 
@@ -575,7 +492,7 @@ public class OkHttpClientManager {
      * @param params
      * @return
      */
-    public static Response post(String url, File file, String fileKey, Param... params) throws IOException {
+    public static Response post(String url, File file, String fileKey, Map<String, String> params) throws IOException {
         return getInstance()._post(url, file, fileKey, params);
     }
 
@@ -588,7 +505,7 @@ public class OkHttpClientManager {
      * @param fileKeys
      * @throws IOException
      */
-    public static void postAsyn(String url, OSIHttpLoaderCallBack callback, File[] files, String[] fileKeys, Param... params) throws IOException {
+    public static void postAsyn(String url, OSIHttpLoaderCallBack callback, File[] files, String[] fileKeys, Map<String, String> params) throws IOException {
         getInstance()._postAsyn(url, callback, files, fileKeys, params);
     }
 
@@ -617,32 +534,10 @@ public class OkHttpClientManager {
      * @param params
      * @throws IOException
      */
-    public static void postAsyn(String url, OSIHttpLoaderCallBack callback, File file, String fileKey, Param... params) throws IOException {
+    public static void postAsyn(String url, OSIHttpLoaderCallBack callback, File file, String fileKey, Map<String, String> params) throws IOException {
         getInstance()._postAsyn(url, callback, file, fileKey, params);
     }
 
-    /**
-     * 加载图片
-     *
-     * @param view
-     * @param url
-     * @throws IOException
-     */
-    public static void displayImage(final ImageView view, String url, int errorResId) throws IOException {
-        getInstance()._displayImage(view, url, errorResId);
-    }
-
-
-    /**
-     * 加载图片
-     *
-     * @param view
-     * @param url
-     * @throws IOException
-     */
-    public static void displayImage(final ImageView view, String url) {
-        getInstance()._displayImage(view, url, -1);
-    }
 
     /**
      * 异步下载文件
@@ -829,7 +724,19 @@ public class OkHttpClientManager {
         });
     }
 
-    private Request buildPostRequest(String url, Param[] params) {
+    private Request buildGetRequest(String url, Param[] headers) {
+
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(url);
+        if(headers!=null && headers.length > 0){
+            for(Param header : headers){
+                requestBuilder.addHeader(header.key, header.value);
+            }
+        }
+        return requestBuilder.build();
+    }
+
+    private Request buildPostRequest(String url, Param[] params,Param[] headers) {
         if (params == null) {
             params = new Param[0];
         }
@@ -838,24 +745,36 @@ public class OkHttpClientManager {
             builder.add(param.key, param.value);
         }
         RequestBody requestBody = builder.build();
-        return new Request.Builder()
+        Request.Builder requestBuilder = new Request.Builder()
                 .url(url)
-                .post(requestBody)
-                .build();
+                .post(requestBody);
+        if(headers!=null && headers.length > 0){
+            for(Param header : headers){
+                requestBuilder.addHeader(header.key, header.value);
+            }
+        }
+        return requestBuilder.build();
     }
 
-    private Request buildPostRequestRaw(String url, String json) {
+    private Request buildPostRequestRaw(String url, String json, Param[] headers) {
 
         //创建一个RequestBody(参数1：数据类型 参数2传递的json串)
         RequestBody requestBody = RequestBody.create(JSON, json);
         //创建一个请求对象
-        return  new Request.Builder()
+        Request.Builder requestBuilder = new Request.Builder()
                 .url(url)
-                .post(requestBody)
-                .build();
+                .post(requestBody);
+
+        if(headers!=null && headers.length > 0){
+            for(Param header : headers){
+                requestBuilder.addHeader(header.key, header.value);
+            }
+        }
+
+        return requestBuilder.build();
     }
 
-    private Request buildDeleteRequest(String url, Param[] params) {
+    private Request buildDeleteRequest(String url, Param[] params, Param[] headers) {
         if (params == null) {
             params = new Param[0];
         }
@@ -864,13 +783,20 @@ public class OkHttpClientManager {
             builder.add(param.key, param.value);
         }
         RequestBody requestBody = builder.build();
-        return new Request.Builder()
+        Request.Builder requestBuilder = new Request.Builder()
                 .url(url)
-                .delete(requestBody)
-                .build();
+                .delete(requestBody);
+
+        if(headers!=null && headers.length > 0){
+            for(Param header : headers){
+                requestBuilder.addHeader(header.key, header.value);
+            }
+        }
+
+        return requestBuilder.build();
     }
 
-    private Request buildPutRequest(String url, Param[] params) {
+    private Request buildPutRequest(String url, Param[] params, Param[] headers) {
         if (params == null) {
             params = new Param[0];
         }
@@ -879,10 +805,18 @@ public class OkHttpClientManager {
             builder.add(param.key, param.value);
         }
         RequestBody requestBody = builder.build();
-        return new Request.Builder()
+        Request.Builder requestBuilder = new Request.Builder()
                 .url(url)
-                .put(requestBody)
-                .build();
+                .put(requestBody);
+
+        if(headers!=null && headers.length > 0){
+            for(Param header : headers){
+                requestBuilder.addHeader(header.key, header.value);
+            }
+        }
+
+        return requestBuilder.build();
+
     }
 
 

@@ -20,7 +20,7 @@ public class TestApplication extends BaseApplication {
 
     @Override
     public Class<?> getFirstActivity() {
-        return TestMainActivity.class;
+        return TestMainFloorActivity.class;
     }
 
     @Override

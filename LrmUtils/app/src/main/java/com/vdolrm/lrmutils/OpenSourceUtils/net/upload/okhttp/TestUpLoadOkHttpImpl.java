@@ -7,9 +7,6 @@ import com.vdolrm.lrmutils.OpenSourceUtils.net.upload.OSIUpLoad;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,15 +18,15 @@ public class TestUpLoadOkHttpImpl implements OSIUpLoad {
     public void upload(String url, OSIHttpDownloadCallBack callback, File file, String fileKey, Map<String, String> map) {
         try {
             if (map != null) {
-                Collection<String> keyset = map.keySet();
+                /*Collection<String> keyset = map.keySet();
                 List<String> list = new ArrayList<>(keyset);
                 OkHttpClientManager.Param[] params = new OkHttpClientManager.Param[list.size()];
                 for (int i = 0; i < list.size(); i++) {
                     OkHttpClientManager.Param p = new OkHttpClientManager.Param(list.get(i), map.get(list.get(i)));
                     params[i] = p;
                 }
-
-                OkHttpClientManager.postAsyn(url, callback, file, fileKey, params);
+                OkHttpClientManager.postAsyn(url, callback, file, fileKey, params);*/
+                OkHttpClientManager.postAsyn(url, callback, file, fileKey, map);
             } else {
                 OkHttpClientManager.postAsyn(url, callback, file, fileKey);
             }

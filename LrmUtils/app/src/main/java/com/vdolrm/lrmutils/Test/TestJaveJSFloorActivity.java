@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.vdolrm.lrmutils.BaseActivity;
+import com.vdolrm.lrmutils.BaseFloorActivity;
 import com.vdolrm.lrmutils.R;
 
 /**
@@ -19,7 +19,7 @@ import com.vdolrm.lrmutils.R;
  * http://mp.weixin.qq.com/s?__biz=MzA5MzI3NjE2MA==&mid=2650237720&idx=1&sn=e2b27592eee630ab35f4e921bf2fa766&chksm=88639a77bf141361aa23e90f930652a2ed013e999a96f6b7f10ef1e86ed8f0f37024fde28b18&mpshare=1&scene=1&srcid=1116ZTXoTujsTSq8eiz0V7nY#rd
  */
 
-public class TestJaveJSActivity extends BaseActivity {
+public class TestJaveJSFloorActivity extends BaseFloorActivity {
     private WebView webView;
     private LinearLayout ll_root;
     private EditText ed_user;
@@ -94,7 +94,7 @@ public class TestJaveJSActivity extends BaseActivity {
     private class JSInterface{
         @JavascriptInterface
         public void showToastByJs(String arg){
-            Toast.makeText(TestJaveJSActivity.this, arg, Toast.LENGTH_SHORT).show();
+            Toast.makeText(TestJaveJSFloorActivity.this, arg, Toast.LENGTH_SHORT).show();
         }
     }
 }

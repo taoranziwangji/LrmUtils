@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseFloorActivity extends AppCompatActivity {
 	/** 记录处于前台的Activity */
 	//private static Activity mForegroundActivity = null;
 
@@ -54,8 +54,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 	
 	public void bundleInOnCreate(Bundle savedInstanceState){};
 
-	//public abstract void addActivity();
-	
 	public abstract void initView();
 	
 	public abstract void init();

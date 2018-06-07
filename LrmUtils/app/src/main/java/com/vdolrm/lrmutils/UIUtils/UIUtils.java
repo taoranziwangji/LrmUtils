@@ -148,7 +148,7 @@ public class UIUtils {
 	}
 
 	public static void startActivity(Intent intent){
-		//Activity activity = BaseActivity.getForegroundActivity();
+		//Activity activity = BaseFloorActivity.getForegroundActivity();
 		Activity activity = null;
 		if(activity != null){
 			activity.startActivity(intent);
@@ -180,8 +180,7 @@ public class UIUtils {
 	
 
 	private static void showToast(String str) {
-		//Activity frontActivity = BaseActivity.getForegroundActivity();
-		Activity frontActivity = null;
+		Activity frontActivity = BaseApplication.getInstance().getStackTopActivity();
 		if (frontActivity != null) {
 			//Toast.makeText(frontActivity, str, Toast.LENGTH_LONG).show();
 

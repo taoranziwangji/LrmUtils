@@ -5,7 +5,6 @@ import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.MediaPlayer;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +19,7 @@ import com.vdolrm.lrmutils.Adapter.RecyclerViewAdapter.BaseMyAdapter;
 import com.vdolrm.lrmutils.Adapter.RecyclerViewAdapter.BaseViewHolder;
 import com.vdolrm.lrmutils.Adapter.RecyclerViewAdapter.OnRecyclerViewItemClickListener;
 import com.vdolrm.lrmutils.Adapter.RecyclerViewAdapter.OnRecyclerViewScrollImageStateListener;
-import com.vdolrm.lrmutils.BaseActivity;
+import com.vdolrm.lrmutils.BaseFloorActivity;
 import com.vdolrm.lrmutils.FileUtils.StorageUtil;
 import com.vdolrm.lrmutils.LogUtils.MyLog;
 import com.vdolrm.lrmutils.OpenSourceUtils.img.OSBaseImageLoaderPresenter;
@@ -42,7 +41,7 @@ import java.util.List;
 import java.util.Map;
 
 //https://github.com/duzechao/DownloadManager 使用okhttp greendao 支持断点续传和暂停等功能的下载框架
-public class TestMainActivity extends BaseActivity {
+public class TestMainFloorActivity extends BaseFloorActivity {
     //private static final String url = "http://test.benniaoyasi.cn/api.php?appid=1&m=api&c=category&a=listcategory&pid=1&devtype=android&version=1.4.0";
     private static final String url = "http://testapp.benniaoyasi.com/api.php?appid=1&m=api&c=ncategory&a=listcategory&pid=1&devtype=android&version=2.0";
    // private static final String urlOther = "http://publicobject.com/helloworld.txt";
@@ -70,8 +69,9 @@ public class TestMainActivity extends BaseActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                UIUtils.showToastSafe("aaa");
+               /* Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
             }
         });
     }
@@ -86,7 +86,7 @@ public class TestMainActivity extends BaseActivity {
     public void initEvent() {
 
         //测试viewpager
-        //Intent intent = new Intent(this,TestFragmentViewPagerActivity.class);
+        //Intent intent = new Intent(this,TestFragmentViewPagerFloorActivity.class);
         //startActivity(intent);
 
 
@@ -94,7 +94,7 @@ public class TestMainActivity extends BaseActivity {
         //testAdapter();
 
         //测试大图裁剪
-        //Intent intent = new Intent(this,TestBigPicShowActivity.class);
+        //Intent intent = new Intent(this,TestBigPicShowFloorActivity.class);
         //startActivity(intent);
 
         //测试MVP模式图片加载（picasso）
@@ -113,7 +113,7 @@ public class TestMainActivity extends BaseActivity {
                     @Override
                     public void run() {
                         //测试fragment viewpager
-                        Intent intent = new Intent(TestMainActivity.this, TestUploadActivity.class);
+                        Intent intent = new Intent(TestMainFloorActivity.this, TestUploadActivity.class);
                         UIUtils.startActivity(intent);
                     }
                 });
@@ -124,7 +124,7 @@ public class TestMainActivity extends BaseActivity {
 
         //测试MVP模式网络请求（okhttp）
         //testOkHttp();
-        //testOkHttpOther();
+        testOkHttpOther();
 
         //测试文件下载
         //testFileDownLoad();
@@ -149,7 +149,7 @@ public class TestMainActivity extends BaseActivity {
         //testRawJsonPost4Okhttp(url,json);
 
         //测试Android与JS交互
-        //Intent in_js = new Intent(this,TestJaveJSActivity.class);
+        //Intent in_js = new Intent(this,TestJaveJSFloorActivity.class);
         //startActivity(in_js);
 
         //测试okhttp的delete方法
@@ -234,7 +234,7 @@ public class TestMainActivity extends BaseActivity {
                     MyLog.d("okhttp onResponse response=" + response);
                 }
             }
-        });
+        },null);
 
         //测试网络请求的取消
         //SystemClock.sleep(10);
@@ -242,8 +242,13 @@ public class TestMainActivity extends BaseActivity {
     }
 
     private void testOkHttpOther() {
+        String url = "http://101.201.114.250:8090/api.php?r=skill/skill/SkillInfo";
+        Map<String,String> mapHeader = new HashMap<>();
+        mapHeader.put("sid","2f05fed8475d55dcabf938cb7d1a36f3");
+        mapHeader.put("os","android");
+        mapHeader.put("version","1");
         httpLoaderPresenter = new TestHttpLoaderPresenter();
-        httpLoaderPresenter.getAsync("test",urlOther, new OSIHttpLoaderCallBack<String>() {
+        httpLoaderPresenter.getAsync("test",url, new OSIHttpLoaderCallBack<String>() {
 
             @Override
             public void onException(Exception e) {
@@ -266,7 +271,7 @@ public class TestMainActivity extends BaseActivity {
                 MyLog.d("okhttp onResponse response=" + response);
 
             }
-        });
+        },mapHeader);
 
     }
 
@@ -295,7 +300,7 @@ public class TestMainActivity extends BaseActivity {
                 MyLog.d("okhttp onResponse response=" + response);
 
             }
-        },json);
+        },json,null);
 
     }
 
@@ -325,7 +330,7 @@ public class TestMainActivity extends BaseActivity {
                 MyLog.d("okhttp onResponse response=" + response);
 
             }
-        },map);
+        },map,null);
 
     }
 

@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".Test.TestMainActivity"
+    tools:context=".Test.TestMainFloorActivity"
     tools:showIn="@layout/lrmutils_activity_main"
     android:orientation="vertical">
 

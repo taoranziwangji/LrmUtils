@@ -20,7 +20,7 @@ import com.vdolrm.lrmutils.Adapter.PageAdapter.BaseFragmentPagerAdapter;
 import com.vdolrm.lrmutils.Adapter.RecyclerViewAdapter.BaseMyAdapter;
 import com.vdolrm.lrmutils.Adapter.RecyclerViewAdapter.BaseViewHolder;
 import com.vdolrm.lrmutils.Adapter.RecyclerViewAdapter.OnRecyclerViewItemClickListener;
-import com.vdolrm.lrmutils.BaseActivity;
+import com.vdolrm.lrmutils.BaseFloorActivity;
 import com.vdolrm.lrmutils.LogUtils.MyLog;
 import com.vdolrm.lrmutils.R;
 import com.vdolrm.lrmutils.UIUtils.UIUtils;
@@ -32,7 +32,7 @@ import java.util.List;
 /**
  * recyclerview的adapter内的布局 假如textview设置了singline则可能导致viewpager不能滑动
  */
-public class TestFragmentViewPagerActivity extends BaseActivity {
+public class TestFragmentViewPagerFloorActivity extends BaseFloorActivity {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;

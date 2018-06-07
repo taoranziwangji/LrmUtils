@@ -12,10 +12,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.vdolrm.lrmutils.BaseActivity;
+import com.vdolrm.lrmutils.BaseFloorActivity;
 import com.vdolrm.lrmutils.Contant;
 import com.vdolrm.lrmutils.FileUtils.FileUtil;
-import com.vdolrm.lrmutils.FileUtils.StorageUtil;
 import com.vdolrm.lrmutils.ImageUtils.CropAddCamera;
 import com.vdolrm.lrmutils.ImageUtils.ImageProcessUtil;
 import com.vdolrm.lrmutils.LogUtils.MyLog;
@@ -27,7 +26,7 @@ import java.io.IOException;
 /**
  * 不再区分拍照还是相册，统一从相册选，大部分机型在相册页有独立的拍照按钮
  */
-public class TestBigPicShowActivity extends BaseActivity {
+public class TestBigPicShowFloorActivity extends BaseFloorActivity {
 
     private Button btn_camera, btn_photo;
     private ImageView imv;
@@ -78,7 +77,7 @@ public class TestBigPicShowActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 imv.setImageResource(R.mipmap.ic_launcher);
-                CropAddCamera.pickCameraImage(TestBigPicShowActivity.this,
+                CropAddCamera.pickCameraImage(TestBigPicShowFloorActivity.this,
                         CropAddCamera.RESULT_CAMERA, imageUri_Camera_big);// camera(note2会进入拍照页面时和进入裁剪页面时都会重新创建TestBigPicShowActivity 从onCreate开始执行)
 
             }
@@ -87,7 +86,7 @@ public class TestBigPicShowActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 imv.setImageResource(R.mipmap.ic_launcher);
-                CropAddCamera.pickImage(TestBigPicShowActivity.this);// 从相册选取
+                CropAddCamera.pickImage(TestBigPicShowFloorActivity.this);// 从相册选取
             }
         });
     }

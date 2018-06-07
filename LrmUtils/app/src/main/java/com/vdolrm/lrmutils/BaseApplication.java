@@ -38,7 +38,7 @@ public abstract class BaseApplication extends Application {
      */
     private static Looper mMainLooper;
 
-    private List<Activity> activitys = null;//必须写成static的 ，否则调用addactivity时会报空！可能是又新建了一个
+    private List<Activity> activitys = null;
 
     /**子类application的对象*/
     //public abstract BaseApplication getapplication();
@@ -168,6 +168,12 @@ public abstract class BaseApplication extends Application {
             activitys.remove(activity);
             MyLog.d("removeActivity "+activity);
         }
+    }
+
+    public Activity getStackTopActivity(){
+        if(activitys!=null && activitys.size()>0)
+            return activitys.get(activitys.size()-1);
+        return null;
     }
 
 
