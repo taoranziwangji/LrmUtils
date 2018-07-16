@@ -26,9 +26,9 @@ public class TestUpLoadOkHttpImpl implements OSIUpLoad {
                     params[i] = p;
                 }
                 OkHttpClientManager.postAsyn(url, callback, file, fileKey, params);*/
-                OkHttpClientManager.postAsyn(url, callback, file, fileKey, map);
+                OkHttpClientManager.postAsyn("test",url, callback, file, fileKey, map);
             } else {
-                OkHttpClientManager.postAsyn(url, callback, file, fileKey);
+                OkHttpClientManager.postAsyn("test",url, callback, file, fileKey);
             }
         } catch (IOException e) {
             e.printStackTrace();

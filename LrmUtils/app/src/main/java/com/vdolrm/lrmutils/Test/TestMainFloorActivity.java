@@ -183,18 +183,18 @@ public class TestMainFloorActivity extends BaseFloorActivity {
 
 
             @Override
-            public void onException(Exception e) {
+            public void onException(String flag, Exception e) {
                 MyLog.d("下载失败" + ",e=" + e.getMessage());
             }
 
 
             @Override
-            public void onError(String errorMsg) {
+            public void onError(String flag, String errorMsg) {
                 MyLog.d("下载失败" + errorMsg);
             }
 
             @Override
-            public void onResponse(String strResponse,String response) {
+            public void onResponse(String flag, String strResponse,String response) {
                 MyLog.d("下载成功" + response);
             }
 
@@ -207,22 +207,22 @@ public class TestMainFloorActivity extends BaseFloorActivity {
         httpLoaderPresenter.getAsync("test",url, new OSIHttpLoaderCallBack<TestOkHttpBean>() {
 
             @Override
-            public void onException(Exception e) {
+            public void onException(String flag, Exception e) {
                 MyLog.d("okhttp error " + ",e=" + e.getMessage());
             }
 
             @Override
-            public void onErrorGsonException(String response, Exception e) {
+            public void onErrorGsonException(String flag, String response, Exception e) {
 
             }
 
             @Override
-            public void onError(String errorMsg) {
+            public void onError(String flag, String errorMsg) {
                 MyLog.d("okhttp error msg=" + errorMsg);
             }
 
             @Override
-            public void onResponse(String strResponse,TestOkHttpBean response) {
+            public void onResponse(String flag, String strResponse,TestOkHttpBean response) {
                 if (response != null) {
                     List<TestOkHttpBean.EdataEntity> list = response.getEdata();
                     if (list != null && list.size() > 0) {
@@ -251,22 +251,22 @@ public class TestMainFloorActivity extends BaseFloorActivity {
         httpLoaderPresenter.getAsync("test",url, new OSIHttpLoaderCallBack<String>() {
 
             @Override
-            public void onException(Exception e) {
+            public void onException(String flag, Exception e) {
                 MyLog.d("okhttp error " + ",e=" + e.getMessage());
             }
 
             @Override
-            public void onErrorGsonException(String response, Exception e) {
+            public void onErrorGsonException(String flag, String response, Exception e) {
 
             }
 
             @Override
-            public void onError(String errorMsg) {
+            public void onError(String flag, String errorMsg) {
                 MyLog.d("okhttp error msg=" + errorMsg);
             }
 
             @Override
-            public void onResponse(String strResponse,String response) {
+            public void onResponse(String flag, String strResponse,String response) {
 
                 MyLog.d("okhttp onResponse response=" + response);
 
@@ -280,22 +280,22 @@ public class TestMainFloorActivity extends BaseFloorActivity {
         httpLoaderPresenter.postAsyncRaw("test",url, new OSIHttpLoaderCallBack<String>() {
 
             @Override
-            public void onException(Exception e) {
+            public void onException(String flag, Exception e) {
                 MyLog.d("okhttp error " + ",e=" + e.getMessage());
             }
 
             @Override
-            public void onErrorGsonException(String response, Exception e) {
+            public void onErrorGsonException(String flag, String response, Exception e) {
 
             }
 
             @Override
-            public void onError(String errorMsg) {
+            public void onError(String flag, String errorMsg) {
                 MyLog.d("okhttp error msg=" + errorMsg);
             }
 
             @Override
-            public void onResponse(String strResponse,String response) {
+            public void onResponse(String flag, String strResponse,String response) {
 
                 MyLog.d("okhttp onResponse response=" + response);
 
@@ -310,22 +310,22 @@ public class TestMainFloorActivity extends BaseFloorActivity {
         httpLoaderPresenter.deleteAsync("test",url, new OSIHttpLoaderCallBack<String>() {
 
             @Override
-            public void onException(Exception e) {
+            public void onException(String flag, Exception e) {
                 MyLog.d("okhttp error " + ",e=" + e.getMessage());
             }
 
             @Override
-            public void onErrorGsonException(String response, Exception e) {
+            public void onErrorGsonException(String flag, String response, Exception e) {
 
             }
 
             @Override
-            public void onError(String errorMsg) {
+            public void onError(String flag, String errorMsg) {
                 MyLog.d("okhttp error msg=" + errorMsg);
             }
 
             @Override
-            public void onResponse(String strResponse,String response) {
+            public void onResponse(String flag, String strResponse,String response) {
 
                 MyLog.d("okhttp onResponse response=" + response);
 

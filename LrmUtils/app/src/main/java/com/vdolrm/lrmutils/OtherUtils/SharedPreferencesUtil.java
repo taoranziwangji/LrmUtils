@@ -3,6 +3,8 @@ package com.vdolrm.lrmutils.OtherUtils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.vdolrm.lrmutils.LogUtils.MyLog;
+
 /**
  * SharedPreferences的一个工具类，调用setParam就能保存String, Integer, Boolean, Float, Long类型的参数
  * 同样调用getParam就能获取到保存在手机里面的数据
@@ -23,6 +25,10 @@ public class SharedPreferencesUtil {
 	 * @param object 
 	 */
 	public static void setParam(Context context , String filename,String key, Object object){
+		if(context == null || StringUtils.isEmpty(filename) || StringUtils.isEmpty(key) || object == null){
+			MyLog.e("share存储失败，数据为空");
+			return;
+		}
 		
 		String type = object.getClass().getSimpleName();
 		SharedPreferences sp = context.getSharedPreferences(filename, Context.MODE_PRIVATE);
@@ -57,6 +63,10 @@ public class SharedPreferencesUtil {
 	 * @return
 	 */
 	public static Object getParam(Context context , String filename,String key, Object defaultObject){
+		if(context == null || StringUtils.isEmpty(filename) || StringUtils.isEmpty(key) || defaultObject == null){
+			MyLog.e("share存储失败，数据为空");
+			return new Object();
+		}
 		String type = defaultObject.getClass().getSimpleName();
 		SharedPreferences sp = context.getSharedPreferences(filename, Context.MODE_PRIVATE);
 		

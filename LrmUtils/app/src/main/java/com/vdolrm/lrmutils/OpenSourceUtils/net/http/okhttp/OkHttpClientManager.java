@@ -125,7 +125,7 @@ public class OkHttpClientManager {
      * @param url
      * @param callback
      */
-    private Call _getAsyn(String url, final OSIHttpLoaderCallBack callback, Map<String, String> headers) {
+    private Call _getAsyn(String flag, String url, final OSIHttpLoaderCallBack callback, Map<String, String> headers) {
         /*final Request request = new Request.Builder()
                 .url(url)
             //  .cacheControl(new CacheControl.Builder()//根据业务服务器的配置来定，笨鸟服务器返回的接口没让缓存
@@ -136,7 +136,7 @@ public class OkHttpClientManager {
         Param[] headersArr = map2Params(headers);
         Request request = buildGetRequest(url,headersArr);
 
-        return deliveryResult(callback, request);
+        return deliveryResult(flag, callback, request);
     }
 
 
@@ -174,11 +174,11 @@ public class OkHttpClientManager {
      * @param callback
      * @param params
      */
-    private void _postAsyn(String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, Map<String, String> headers) {
+    private void _postAsyn(final String flag, String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, Map<String, String> headers) {
         Param[] paramsArr = map2Params(params);
         Param[] headersArr = map2Params(headers);
         Request request = buildPostRequest(url, paramsArr,headersArr);
-        deliveryResult(callback, request);
+        deliveryResult(flag, callback, request);
     }
 
     /**
@@ -188,10 +188,10 @@ public class OkHttpClientManager {
      * @param callback
      * @param json
      */
-    private void _postAsynRaw(String url, final OSIHttpLoaderCallBack callback, String json, Map<String, String> headers) {
+    private void _postAsynRaw(final String flag, String url, final OSIHttpLoaderCallBack callback, String json, Map<String, String> headers) {
         Param[] headersArr = map2Params(headers);
         Request request = buildPostRequestRaw(url, json, headersArr);
-        deliveryResult(callback, request);
+        deliveryResult(flag, callback, request);
     }
 
     /**
@@ -201,11 +201,11 @@ public class OkHttpClientManager {
      * @param callback
      * @param params
      */
-    private void _deleteAsyn(String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, Map<String, String> headers) {
+    private void _deleteAsyn(final String flag, String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, Map<String, String> headers) {
         Param[] paramsArr = map2Params(params);
         Param[] headersArr = map2Params(headers);
         Request request = buildDeleteRequest(url, paramsArr, headersArr);
-        deliveryResult(callback, request);
+        deliveryResult(flag, callback, request);
     }
 
     /**
@@ -215,11 +215,11 @@ public class OkHttpClientManager {
      * @param callback
      * @param params
      */
-    private void _putAsyn(String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, Map<String, String> headers) {
+    private void _putAsyn(final String flag, String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, Map<String, String> headers) {
         Param[] paramsArr = map2Params(params);
         Param[] headersArr = map2Params(headers);
         Request request = buildPutRequest(url, paramsArr, headersArr);
-        deliveryResult(callback, request);
+        deliveryResult(flag, callback, request);
     }
 
     /**
@@ -254,10 +254,10 @@ public class OkHttpClientManager {
      * @param fileKeys
      * @throws IOException
      */
-    private void _postAsyn(String url, OSIHttpLoaderCallBack callback, File[] files, String[] fileKeys, Map<String, String> params) throws IOException {
+    private void _postAsyn(final String flag, String url, OSIHttpLoaderCallBack callback, File[] files, String[] fileKeys, Map<String, String> params) throws IOException {
         Param[] paramsArr = map2Params(params);
         Request request = buildMultipartFormRequest(url, files, fileKeys, paramsArr);
-        deliveryResult(callback, request);
+        deliveryResult(flag, callback, request);
     }
 
     /**
@@ -269,9 +269,9 @@ public class OkHttpClientManager {
      * @param fileKey
      * @throws IOException
      */
-    private void _postAsyn(String url, OSIHttpLoaderCallBack callback, File file, String fileKey) throws IOException {
+    private void _postAsyn(final String flag, String url, OSIHttpLoaderCallBack callback, File file, String fileKey) throws IOException {
         Request request = buildMultipartFormRequest(url, new File[]{file}, new String[]{fileKey}, null);
-        deliveryResult(callback, request);
+        deliveryResult(flag, callback, request);
     }
 
     /**
@@ -284,10 +284,10 @@ public class OkHttpClientManager {
      * @param params
      * @throws IOException
      */
-    private void _postAsyn(String url, OSIHttpLoaderCallBack callback, File file, String fileKey, Map<String, String> params) throws IOException {
+    private void _postAsyn(final String flag, String url, OSIHttpLoaderCallBack callback, File file, String fileKey, Map<String, String> params) throws IOException {
         Param[] paramsArr = map2Params(params);
         Request request = buildMultipartFormRequest(url, new File[]{file}, new String[]{fileKey}, paramsArr);
-        deliveryResult(callback, request);
+        deliveryResult(flag, callback, request);
     }
 
     /**
@@ -297,8 +297,8 @@ public class OkHttpClientManager {
      * @param destFileDir 本地文件存储的文件夹
      * @param callback
      */
-    private void _downloadAsyn(final String url, final String destFileDir, final OSIHttpDownloadCallBack callback) {
-        _downloadAsyn(url, destFileDir, getFileName(url), callback);
+    private void _downloadAsyn(final String flag, final String url, final String destFileDir, final OSIHttpDownloadCallBack callback) {
+        _downloadAsyn(flag, url, destFileDir, getFileName(url), callback);
     }
 
     /**
@@ -309,7 +309,7 @@ public class OkHttpClientManager {
      * @param callback
      * @param fileName    文件名
      */
-    private void _downloadAsyn(final String url, final String destFileDir, final String fileName, final OSIHttpDownloadCallBack callback) {
+    private void _downloadAsyn(final String flag, final String url, final String destFileDir, final String fileName, final OSIHttpDownloadCallBack callback) {
 
         final Request request = new Request.Builder()
                 .url(url)
@@ -318,7 +318,7 @@ public class OkHttpClientManager {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(final Call call, final IOException e) {
-                sendFailedStringCallback(request, e, callback);
+                sendFailedStringCallback(flag, request, e, callback);
             }
 
             @Override
@@ -340,9 +340,9 @@ public class OkHttpClientManager {
                     }
                     fos.flush();
                     //如果下载文件成功，第一个参数为文件的绝对路径
-                    sendSuccessOSIHttpLoaderCallBack(file.getAbsolutePath(), file.getAbsolutePath(), callback);
+                    sendSuccessOSIHttpLoaderCallBack(flag, file.getAbsolutePath(), file.getAbsolutePath(), callback);
                 } catch (IOException e) {
-                    sendFailedStringCallback(response.request(), e, callback);
+                    sendFailedStringCallback(flag, response.request(), e, callback);
                 } finally {
                     try {
                         if (is != null) is.close();
@@ -395,8 +395,8 @@ public class OkHttpClientManager {
      * @param url
      * @param callback
      */
-    public static Call getAsyn(String url, OSIHttpLoaderCallBack callback, Map<String, String> headers) {
-        return getInstance()._getAsyn(url, callback, headers);
+    public static Call getAsyn(String flag, String url, OSIHttpLoaderCallBack callback, Map<String, String> headers) {
+        return getInstance()._getAsyn(flag, url, callback, headers);
     }
 
     /**
@@ -429,8 +429,8 @@ public class OkHttpClientManager {
      * @param callback
      * @param params
      */
-    public static void postAsyn(String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, Map<String, String> headers) {
-        getInstance()._postAsyn(url, callback, params, headers);
+    public static void postAsyn(final String flag, String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, Map<String, String> headers) {
+        getInstance()._postAsyn(flag, url, callback, params, headers);
     }
 
     /**
@@ -440,8 +440,8 @@ public class OkHttpClientManager {
      * @param callback
      * @param json
      */
-    public static void postAsynRaw(String url, final OSIHttpLoaderCallBack callback, String json, Map<String, String> headers) {
-        getInstance()._postAsynRaw(url, callback, json, headers);
+    public static void postAsynRaw(final String flag, String url, final OSIHttpLoaderCallBack callback, String json, Map<String, String> headers) {
+        getInstance()._postAsynRaw(flag, url, callback, json, headers);
     }
 
     /**
@@ -451,8 +451,8 @@ public class OkHttpClientManager {
      * @param callback
      * @param params
      */
-    public static void deleteAsyn(String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, Map<String, String> headers) {
-        getInstance()._deleteAsyn(url, callback, params, headers);
+    public static void deleteAsyn(final String flag, String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, Map<String, String> headers) {
+        getInstance()._deleteAsyn(flag, url, callback, params, headers);
     }
 
     /**
@@ -462,8 +462,8 @@ public class OkHttpClientManager {
      * @param callback
      * @param params
      */
-    public static void putAsyn(String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, Map<String, String> headers) {
-        getInstance()._putAsyn(url, callback, params, headers);
+    public static void putAsyn(final String flag, String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, Map<String, String> headers) {
+        getInstance()._putAsyn(flag, url, callback, params, headers);
     }
 
 
@@ -505,8 +505,8 @@ public class OkHttpClientManager {
      * @param fileKeys
      * @throws IOException
      */
-    public static void postAsyn(String url, OSIHttpLoaderCallBack callback, File[] files, String[] fileKeys, Map<String, String> params) throws IOException {
-        getInstance()._postAsyn(url, callback, files, fileKeys, params);
+    public static void postAsyn(final String flag, String url, OSIHttpLoaderCallBack callback, File[] files, String[] fileKeys, Map<String, String> params) throws IOException {
+        getInstance()._postAsyn(flag, url, callback, files, fileKeys, params);
     }
 
 
@@ -519,8 +519,8 @@ public class OkHttpClientManager {
      * @param fileKey
      * @throws IOException
      */
-    public static void postAsyn(String url, OSIHttpLoaderCallBack callback, File file, String fileKey) throws IOException {
-        getInstance()._postAsyn(url, callback, file, fileKey);
+    public static void postAsyn(final String flag, String url, OSIHttpLoaderCallBack callback, File file, String fileKey) throws IOException {
+        getInstance()._postAsyn(flag, url, callback, file, fileKey);
     }
 
 
@@ -534,8 +534,8 @@ public class OkHttpClientManager {
      * @param params
      * @throws IOException
      */
-    public static void postAsyn(String url, OSIHttpLoaderCallBack callback, File file, String fileKey, Map<String, String> params) throws IOException {
-        getInstance()._postAsyn(url, callback, file, fileKey, params);
+    public static void postAsyn(final String flag, String url, OSIHttpLoaderCallBack callback, File file, String fileKey, Map<String, String> params) throws IOException {
+        getInstance()._postAsyn(flag, url, callback, file, fileKey, params);
     }
 
 
@@ -546,8 +546,8 @@ public class OkHttpClientManager {
      * @param destDir  本地文件存储的文件夹
      * @param callback
      */
-    public static void downloadAsyn(String url, String destDir, OSIHttpDownloadCallBack callback) {
-        getInstance()._downloadAsyn(url, destDir, callback);
+    public static void downloadAsyn(final String flag, String url, String destDir, OSIHttpDownloadCallBack callback) {
+        getInstance()._downloadAsyn(flag, url, destDir, callback);
     }
 
     /**
@@ -558,8 +558,8 @@ public class OkHttpClientManager {
      * @param callback
      * @param fileName
      */
-    public static void downloadAsyn(String url, String destDir, String fileName, OSIHttpDownloadCallBack callback) {
-        getInstance()._downloadAsyn(url, destDir, fileName, callback);
+    public static void downloadAsyn(final String flag, String url, String destDir, String fileName, OSIHttpDownloadCallBack callback) {
+        getInstance()._downloadAsyn(flag, url, destDir, fileName, callback);
     }
 
     //****************************
@@ -634,13 +634,13 @@ public class OkHttpClientManager {
 
     private Map<String, String> mSessions = new HashMap<String, String>();
 
-    private Call deliveryResult(final OSIHttpLoaderCallBack callback, final Request request) {
+    private Call deliveryResult(final String flag, final OSIHttpLoaderCallBack callback, final Request request) {
         Call call = mOkHttpClient.newCall(request);
         call.enqueue(new Callback() {
             @Override
             public void onFailure(final Call call, final IOException e) {
 
-                sendFailedStringCallback(request, e, callback);
+                sendFailedStringCallback(flag, request, e, callback);
             }
 
             @Override
@@ -651,19 +651,19 @@ public class OkHttpClientManager {
                     final String string = response.body().string();
                     strResponse = string;
                     if (callback.getType() == String.class) {
-                        sendSuccessOSIHttpLoaderCallBack(string, string, callback);
+                        sendSuccessOSIHttpLoaderCallBack(flag, string, string, callback);
                     } else {
                         Object o = mGson.fromJson(string, callback.getType());
-                        sendSuccessOSIHttpLoaderCallBack(string, o, callback);
+                        sendSuccessOSIHttpLoaderCallBack(flag, string, o, callback);
                     }
 
 
                 } catch (IOException e) {
-                    sendFailedStringCallback(response.request(), e, callback);
+                    sendFailedStringCallback(flag, response.request(), e, callback);
                 } catch (com.google.gson.JsonParseException e)//Json解析的错误
                 {
                     // sendFailedStringCallback(response.request(), e, callback);
-                    sendFailedStringByErrorGsonCallback(response.request(), strResponse, e, callback);
+                    sendFailedStringByErrorGsonCallback(flag, response.request(), strResponse, e, callback);
                 }
 
             }
@@ -672,42 +672,42 @@ public class OkHttpClientManager {
         return call;
     }
 
-    private void sendFailedStringCallback(final Request request, final String msg, final OSIHttpLoaderCallBack callback) {
+    private void sendFailedStringCallback(final String flag, final Request request, final String msg, final OSIHttpLoaderCallBack callback) {
         mDelivery.post(new Runnable() {
             @Override
             public void run() {
                 if (callback != null)
-                    callback.onError(msg);
+                    callback.onError(flag, msg);
             }
         });
     }
 
-    private void sendFailedStringByErrorGsonCallback(final Request request, final String strResponse, final Exception e, final OSIHttpLoaderCallBack callback) {
+    private void sendFailedStringByErrorGsonCallback(final String flag, final Request request, final String strResponse, final Exception e, final OSIHttpLoaderCallBack callback) {
         mDelivery.post(new Runnable() {
             @Override
             public void run() {
                 if (callback != null)
-                    callback.onErrorGsonException(strResponse, e);
+                    callback.onErrorGsonException(flag, strResponse, e);
             }
         });
     }
 
-    private void sendFailedStringCallback(final Request request, final Exception e, final OSIHttpLoaderCallBack callback) {
+    private void sendFailedStringCallback(final String flag, final Request request, final Exception e, final OSIHttpLoaderCallBack callback) {
         mDelivery.post(new Runnable() {
             @Override
             public void run() {
                 if (callback != null)
-                    callback.onException(e);
+                    callback.onException(flag, e);
             }
         });
     }
 
-    private void sendSuccessOSIHttpLoaderCallBack(final String strResponse, final Object object, final OSIHttpLoaderCallBack callback) {
+    private void sendSuccessOSIHttpLoaderCallBack(final String flag, final String strResponse, final Object object, final OSIHttpLoaderCallBack callback) {
         mDelivery.post(new Runnable() {
             @Override
             public void run() {
                 if (callback != null) {
-                    callback.onResponse(strResponse, object);
+                    callback.onResponse(flag, strResponse, object);
                 }
             }
         });

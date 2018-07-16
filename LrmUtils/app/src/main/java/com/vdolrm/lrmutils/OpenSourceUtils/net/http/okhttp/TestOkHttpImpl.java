@@ -16,7 +16,7 @@ public class TestOkHttpImpl implements OSIHttpLoader {
 
     @Override
     public void getAsync(String flag, String url, OSIHttpLoaderCallBack callBack, Map<String, String> headers) {
-        call = OkHttpClientManager.getAsyn(url, callBack, headers);
+        call = OkHttpClientManager.getAsyn(flag, url, callBack, headers);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class TestOkHttpImpl implements OSIHttpLoader {
     @Override
     public void postAsync(String flag, String url, OSIHttpLoaderCallBack callBack, Map<String, String> params, Map<String, String> headers) {
 
-        OkHttpClientManager.postAsyn(url, callBack, params, headers);
+        OkHttpClientManager.postAsyn(flag, url, callBack, params, headers);
     }
 
     /**
@@ -46,16 +46,16 @@ public class TestOkHttpImpl implements OSIHttpLoader {
      */
     @Override
     public void postAsyncRaw(String flag, String url, OSIHttpLoaderCallBack callBack, String json, Map<String, String> headers) {
-        OkHttpClientManager.postAsynRaw(url, callBack, json, headers);
+        OkHttpClientManager.postAsynRaw(flag, url, callBack, json, headers);
     }
 
     @Override
     public void deleteAsync(String flag, String url, OSIHttpLoaderCallBack callBack, Map<String, String> params, Map<String, String> headers) {
-        OkHttpClientManager.deleteAsyn(url,callBack,params,headers);
+        OkHttpClientManager.deleteAsyn(flag, url,callBack,params,headers);
     }
 
     @Override
     public void putAsync(String flag, String url, OSIHttpLoaderCallBack callBack, Map<String, String> params, Map<String, String> headers) {
-        OkHttpClientManager.putAsyn(url,callBack,params,headers);
+        OkHttpClientManager.putAsyn(flag, url,callBack,params,headers);
     }
 }

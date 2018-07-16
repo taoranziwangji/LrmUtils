@@ -37,18 +37,18 @@ public class TestUploadActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onException(Exception e) {
+            public void onException(String flag, Exception e) {
                 MyLog.d(TAG_NET, "e=" + e.getMessage());
             }
 
             @Override
-            public void onError(String errorMsg) {
+            public void onError(String flag, String errorMsg) {
                 MyLog.d(TAG_NET,"errorMsg="+errorMsg);
             }
 
 
             @Override
-            public void onResponse(String strResponse,String response) {
+            public void onResponse(String flag, String strResponse,String response) {
                 MyLog.d(TAG_NET,"response="+response);
             }
         },file,fileKey,null);

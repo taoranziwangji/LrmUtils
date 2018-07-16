@@ -11,7 +11,7 @@ public abstract class OSIHttpDownloadCallBack<T> extends OSIHttpLoaderCallBack<T
     public abstract void onLoading(long total, long current, boolean isUploading);
 
     @Override
-    public final void onErrorGsonException(String response, Exception e) {
+    public final void onErrorGsonException(String flag, String response, Exception e) {
         //下载时不会被调用到，写成final
     }
 
