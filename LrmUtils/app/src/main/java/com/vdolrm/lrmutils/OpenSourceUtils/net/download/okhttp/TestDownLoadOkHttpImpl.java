@@ -9,8 +9,8 @@ import com.vdolrm.lrmutils.OpenSourceUtils.net.download.OSIDownLoad;
  */
 public class TestDownLoadOkHttpImpl implements OSIDownLoad {
     @Override
-    public void download(String url, String destDir, String fileName, OSIHttpDownloadCallBack callback) {
-        OkHttpClientManager.downloadAsyn(url,destDir,fileName,callback);
+    public void download(String flag, String url, String destDir, String fileName, OSIHttpDownloadCallBack callback) {
+        OkHttpClientManager.downloadAsyn(flag, url,destDir,fileName,callback);
 
     }
 }

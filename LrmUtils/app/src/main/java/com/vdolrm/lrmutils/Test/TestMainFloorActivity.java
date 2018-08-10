@@ -175,7 +175,7 @@ public class TestMainFloorActivity extends BaseFloorActivity {
     }
 
     private void testFileDownLoad() {
-        new TestDownLoadPresenter().download(url_mp3, StorageUtil.getExternalRootPath(), "zabc.mp3", new OSIHttpDownloadCallBack<String>() {
+        new TestDownLoadPresenter().download("download",url_mp3, StorageUtil.getExternalRootPath(), "zabc.mp3", new OSIHttpDownloadCallBack<String>() {
             @Override
             public void onLoading(long total, long current, boolean isUploading) {
                 MyLog.d("正在下载 total=" + total + ",current=" + current);

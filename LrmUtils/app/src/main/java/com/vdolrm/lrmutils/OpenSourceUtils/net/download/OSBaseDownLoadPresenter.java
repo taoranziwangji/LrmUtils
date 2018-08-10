@@ -20,8 +20,8 @@ public abstract class OSBaseDownLoadPresenter {
      * @param fileName
      * @param callback
      */
-    public void download(String url, String destDir, String fileName, OSIHttpDownloadCallBack callback) {
+    public void download(String flag, String url, String destDir, String fileName, OSIHttpDownloadCallBack callback) {
         if (osiHttpLoader != null)
-            osiHttpLoader.download(url,destDir,fileName,callback);
+            osiHttpLoader.download(flag, url,destDir,fileName,callback);
     }
 }
