@@ -21,9 +21,9 @@ public abstract class OSBaseHttpLoaderPresenter {
      * @param url
      * @param objectCallBack
      */
-    public void getAsync(String flag, String url, OSIHttpLoaderCallBack objectCallBack, Map<String, String> headers) {
+    public void getAsync(String flag, String url, OSIHttpLoaderCallBack objectCallBack, String userAgent, Map<String, String> headers) {
         if (osiHttpLoader != null)
-            osiHttpLoader.getAsync(flag, url, objectCallBack, headers);
+            osiHttpLoader.getAsync(flag, url, objectCallBack, userAgent, headers);
     }
 
 
@@ -43,9 +43,9 @@ public abstract class OSBaseHttpLoaderPresenter {
      * @param callBack
      * @param params
      */
-    public void postAsync(String flag, String url, OSIHttpLoaderCallBack callBack, Map<String, String> params, Map<String, String> headers) {
+    public void postAsync(String flag, String url, OSIHttpLoaderCallBack callBack, Map<String, String> params, String userAgent, Map<String, String> headers) {
         if (osiHttpLoader != null) {
-            osiHttpLoader.postAsync(flag, url, callBack, params, headers);
+            osiHttpLoader.postAsync(flag, url, callBack, params, userAgent, headers);
         }
     }
 
@@ -54,9 +54,9 @@ public abstract class OSBaseHttpLoaderPresenter {
      * @param callBack
      * @param json
      */
-    public void postAsyncRaw(String flag, String url, OSIHttpLoaderCallBack callBack, String json, Map<String, String> headers) {
+    public void postAsyncRaw(String flag, String url, OSIHttpLoaderCallBack callBack, String json, String userAgent, Map<String, String> headers) {
         if (osiHttpLoader != null) {
-            osiHttpLoader.postAsyncRaw(flag, url, callBack, json, headers);
+            osiHttpLoader.postAsyncRaw(flag, url, callBack, json, userAgent, headers);
         }
     }
 
@@ -65,9 +65,9 @@ public abstract class OSBaseHttpLoaderPresenter {
      * @param callBack
      * @param params
      */
-    public void deleteAsync(String flag, String url, OSIHttpLoaderCallBack callBack, Map<String, String> params, Map<String, String> headers) {
+    public void deleteAsync(String flag, String url, OSIHttpLoaderCallBack callBack, Map<String, String> params, String userAgent, Map<String, String> headers) {
         if (osiHttpLoader != null) {
-            osiHttpLoader.deleteAsync(flag, url, callBack, params, headers);
+            osiHttpLoader.deleteAsync(flag, url, callBack, params, userAgent, headers);
         }
     }
 
@@ -76,9 +76,9 @@ public abstract class OSBaseHttpLoaderPresenter {
      * @param callBack
      * @param params
      */
-    public void putAsync(String flag, String url, OSIHttpLoaderCallBack callBack, Map<String, String> params, Map<String, String> headers) {
+    public void putAsync(String flag, String url, OSIHttpLoaderCallBack callBack, Map<String, String> params, String userAgent, Map<String, String> headers) {
         if (osiHttpLoader != null) {
-            osiHttpLoader.putAsync(flag, url, callBack, params, headers);
+            osiHttpLoader.putAsync(flag, url, callBack, params, userAgent, headers);
         }
     }
 }

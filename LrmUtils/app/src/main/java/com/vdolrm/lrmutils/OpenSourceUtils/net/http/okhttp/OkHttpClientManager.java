@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.vdolrm.lrmutils.NetUtils.NetCheckUtil;
 import com.vdolrm.lrmutils.OpenSourceUtils.net.download.OSIHttpDownloadCallBack;
 import com.vdolrm.lrmutils.OpenSourceUtils.net.http.OSIHttpLoaderCallBack;
+import com.vdolrm.lrmutils.OtherUtils.StringUtils;
 import com.vdolrm.lrmutils.UIUtils.UIUtils;
 
 import java.io.File;
@@ -98,10 +99,14 @@ public class OkHttpClientManager {
      * @param url
      * @return Response
      */
-    private Response _getAsyn(String url) throws IOException {
-        final Request request = new Request.Builder()
-                .url(url)
-                .build();
+    private Response _getAsyn(String url, String userAgent) throws IOException {
+        Request.Builder builder = new Request.Builder()
+                .url(url);
+        if(StringUtils.isNotEmpty(userAgent)){
+            builder.removeHeader("User-Agent").addHeader("User-Agent", userAgent);
+        }
+        final Request request = builder.build();
+
         Call call = mOkHttpClient.newCall(request);
         Response execute = call.execute();
         return execute;
@@ -113,8 +118,8 @@ public class OkHttpClientManager {
      * @param url
      * @return 字符串
      */
-    private String _getAsString(String url) throws IOException {
-        Response execute = _getAsyn(url);
+    private String _getAsString(String url, String userAgent) throws IOException {
+        Response execute = _getAsyn(url, userAgent);
         return execute.body().string();
     }
 
@@ -125,7 +130,7 @@ public class OkHttpClientManager {
      * @param url
      * @param callback
      */
-    private Call _getAsyn(String flag, String url, final OSIHttpLoaderCallBack callback, Map<String, String> headers) {
+    private Call _getAsyn(String flag, String url, final OSIHttpLoaderCallBack callback, String userAgent, Map<String, String> headers) {
         /*final Request request = new Request.Builder()
                 .url(url)
             //  .cacheControl(new CacheControl.Builder()//根据业务服务器的配置来定，笨鸟服务器返回的接口没让缓存
@@ -134,7 +139,7 @@ public class OkHttpClientManager {
                 .build();*/
 
         Param[] headersArr = map2Params(headers);
-        Request request = buildGetRequest(url,headersArr);
+        Request request = buildGetRequest(url,userAgent,headersArr);
 
         return deliveryResult(flag, callback, request);
     }
@@ -147,9 +152,9 @@ public class OkHttpClientManager {
      * @param params post的参数
      * @return
      */
-    private Response _post(String url, Map<String, String> params, Param... headers) throws IOException {
+    private Response _post(String url, Map<String, String> params, String userAgent, Param... headers) throws IOException {
         Param[] paramsArr = map2Params(params);
-        Request request = buildPostRequest(url, paramsArr, headers);
+        Request request = buildPostRequest(url, paramsArr, userAgent, headers);
         Response response = mOkHttpClient.newCall(request).execute();
         return response;
     }
@@ -162,8 +167,8 @@ public class OkHttpClientManager {
      * @param params post的参数
      * @return 字符串
      */
-    private String _postAsString(String url, Map<String, String> params, Param... headers) throws IOException {
-        Response response = _post(url, params, headers);
+    private String _postAsString(String url, Map<String, String> params, String userAgent, Param... headers) throws IOException {
+        Response response = _post(url, params, userAgent, headers);
         return response.body().string();
     }
 
@@ -174,10 +179,10 @@ public class OkHttpClientManager {
      * @param callback
      * @param params
      */
-    private void _postAsyn(final String flag, String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, Map<String, String> headers) {
+    private void _postAsyn(final String flag, String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, String userAgent, Map<String, String> headers) {
         Param[] paramsArr = map2Params(params);
         Param[] headersArr = map2Params(headers);
-        Request request = buildPostRequest(url, paramsArr,headersArr);
+        Request request = buildPostRequest(url, paramsArr, userAgent, headersArr);
         deliveryResult(flag, callback, request);
     }
 
@@ -188,9 +193,9 @@ public class OkHttpClientManager {
      * @param callback
      * @param json
      */
-    private void _postAsynRaw(final String flag, String url, final OSIHttpLoaderCallBack callback, String json, Map<String, String> headers) {
+    private void _postAsynRaw(final String flag, String url, final OSIHttpLoaderCallBack callback, String json, String userAgent, Map<String, String> headers) {
         Param[] headersArr = map2Params(headers);
-        Request request = buildPostRequestRaw(url, json, headersArr);
+        Request request = buildPostRequestRaw(url, json, userAgent, headersArr);
         deliveryResult(flag, callback, request);
     }
 
@@ -201,10 +206,10 @@ public class OkHttpClientManager {
      * @param callback
      * @param params
      */
-    private void _deleteAsyn(final String flag, String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, Map<String, String> headers) {
+    private void _deleteAsyn(final String flag, String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, String userAgent, Map<String, String> headers) {
         Param[] paramsArr = map2Params(params);
         Param[] headersArr = map2Params(headers);
-        Request request = buildDeleteRequest(url, paramsArr, headersArr);
+        Request request = buildDeleteRequest(url, paramsArr, userAgent, headersArr);
         deliveryResult(flag, callback, request);
     }
 
@@ -215,10 +220,10 @@ public class OkHttpClientManager {
      * @param callback
      * @param params
      */
-    private void _putAsyn(final String flag, String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, Map<String, String> headers) {
+    private void _putAsyn(final String flag, String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, String userAgent, Map<String, String> headers) {
         Param[] paramsArr = map2Params(params);
         Param[] headersArr = map2Params(headers);
-        Request request = buildPutRequest(url, paramsArr, headersArr);
+        Request request = buildPutRequest(url, paramsArr, userAgent, headersArr);
         deliveryResult(flag, callback, request);
     }
 
@@ -374,8 +379,8 @@ public class OkHttpClientManager {
      * @param url
      * @return Response
      */
-    public static Response getAsyn(String url) throws IOException {
-        return getInstance()._getAsyn(url);
+    public static Response getAsyn(String url, String userAgent) throws IOException {
+        return getInstance()._getAsyn(url, userAgent);
     }
 
 
@@ -385,8 +390,8 @@ public class OkHttpClientManager {
      * @param url
      * @return 字符串
      */
-    public static String getAsString(String url) throws IOException {
-        return getInstance()._getAsString(url);
+    public static String getAsString(String url, String userAgent) throws IOException {
+        return getInstance()._getAsString(url, userAgent);
     }
 
     /**
@@ -395,8 +400,8 @@ public class OkHttpClientManager {
      * @param url
      * @param callback
      */
-    public static Call getAsyn(String flag, String url, OSIHttpLoaderCallBack callback, Map<String, String> headers) {
-        return getInstance()._getAsyn(flag, url, callback, headers);
+    public static Call getAsyn(String flag, String url, OSIHttpLoaderCallBack callback, String userAgent, Map<String, String> headers) {
+        return getInstance()._getAsyn(flag, url, callback, userAgent, headers);
     }
 
     /**
@@ -406,8 +411,8 @@ public class OkHttpClientManager {
      * @param params post的参数
      * @return
      */
-    public static Response post(String url, Map<String, String> params, Param... headers) throws IOException {
-        return getInstance()._post(url, params, headers);
+    public static Response post(String url, Map<String, String> params, String userAgent, Param... headers) throws IOException {
+        return getInstance()._post(url, params, userAgent, headers);
     }
 
     /**
@@ -417,8 +422,8 @@ public class OkHttpClientManager {
      * @param params post的参数
      * @return 字符串
      */
-    public static String postAsString(String url, Map<String, String> params, Param... headers) throws IOException {
-        return getInstance()._postAsString(url, params, headers);
+    public static String postAsString(String url, Map<String, String> params, String userAgent, Param... headers) throws IOException {
+        return getInstance()._postAsString(url, params, userAgent, headers);
     }
 
 
@@ -429,8 +434,8 @@ public class OkHttpClientManager {
      * @param callback
      * @param params
      */
-    public static void postAsyn(final String flag, String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, Map<String, String> headers) {
-        getInstance()._postAsyn(flag, url, callback, params, headers);
+    public static void postAsyn(final String flag, String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, String userAgent, Map<String, String> headers) {
+        getInstance()._postAsyn(flag, url, callback, params, userAgent, headers);
     }
 
     /**
@@ -440,8 +445,8 @@ public class OkHttpClientManager {
      * @param callback
      * @param json
      */
-    public static void postAsynRaw(final String flag, String url, final OSIHttpLoaderCallBack callback, String json, Map<String, String> headers) {
-        getInstance()._postAsynRaw(flag, url, callback, json, headers);
+    public static void postAsynRaw(final String flag, String url, final OSIHttpLoaderCallBack callback, String json, String userAgent, Map<String, String> headers) {
+        getInstance()._postAsynRaw(flag, url, callback, json, userAgent, headers);
     }
 
     /**
@@ -451,8 +456,8 @@ public class OkHttpClientManager {
      * @param callback
      * @param params
      */
-    public static void deleteAsyn(final String flag, String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, Map<String, String> headers) {
-        getInstance()._deleteAsyn(flag, url, callback, params, headers);
+    public static void deleteAsyn(final String flag, String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, String userAgent, Map<String, String> headers) {
+        getInstance()._deleteAsyn(flag, url, callback, params, userAgent, headers);
     }
 
     /**
@@ -462,8 +467,8 @@ public class OkHttpClientManager {
      * @param callback
      * @param params
      */
-    public static void putAsyn(final String flag, String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, Map<String, String> headers) {
-        getInstance()._putAsyn(flag, url, callback, params, headers);
+    public static void putAsyn(final String flag, String url, final OSIHttpLoaderCallBack callback, Map<String, String> params, String userAgent, Map<String, String> headers) {
+        getInstance()._putAsyn(flag, url, callback, params, userAgent, headers);
     }
 
 
@@ -724,10 +729,13 @@ public class OkHttpClientManager {
         });
     }
 
-    private Request buildGetRequest(String url, Param[] headers) {
+    private Request buildGetRequest(String url, String userAgent, Param[] headers) {
 
         Request.Builder requestBuilder = new Request.Builder()
                 .url(url);
+        if(StringUtils.isNotEmpty(userAgent)){
+            requestBuilder.removeHeader("User-Agent").addHeader("User-Agent", userAgent);
+        }
         if(headers!=null && headers.length > 0){
             for(Param header : headers){
                 requestBuilder.addHeader(header.key, header.value);
@@ -736,7 +744,7 @@ public class OkHttpClientManager {
         return requestBuilder.build();
     }
 
-    private Request buildPostRequest(String url, Param[] params,Param[] headers) {
+    private Request buildPostRequest(String url, Param[] params, String userAgent, Param[] headers) {
         if (params == null) {
             params = new Param[0];
         }
@@ -745,9 +753,14 @@ public class OkHttpClientManager {
             builder.add(param.key, param.value);
         }
         RequestBody requestBody = builder.build();
-        Request.Builder requestBuilder = new Request.Builder()
-                .url(url)
-                .post(requestBody);
+
+        Request.Builder builder2 = new Request.Builder()
+                .url(url);
+        if(StringUtils.isNotEmpty(userAgent)){
+            builder2.removeHeader("User-Agent").addHeader("User-Agent", userAgent);
+        }
+        Request.Builder requestBuilder = builder2.post(requestBody);
+
         if(headers!=null && headers.length > 0){
             for(Param header : headers){
                 requestBuilder.addHeader(header.key, header.value);
@@ -756,14 +769,17 @@ public class OkHttpClientManager {
         return requestBuilder.build();
     }
 
-    private Request buildPostRequestRaw(String url, String json, Param[] headers) {
+    private Request buildPostRequestRaw(String url, String json, String userAgent, Param[] headers) {
 
         //创建一个RequestBody(参数1：数据类型 参数2传递的json串)
         RequestBody requestBody = RequestBody.create(JSON, json);
         //创建一个请求对象
-        Request.Builder requestBuilder = new Request.Builder()
-                .url(url)
-                .post(requestBody);
+        Request.Builder builder = new Request.Builder()
+                .url(url);
+        if(StringUtils.isNotEmpty(userAgent)){
+            builder.removeHeader("User-Agent").addHeader("User-Agent", userAgent);
+        }
+        Request.Builder requestBuilder = builder.post(requestBody);
 
         if(headers!=null && headers.length > 0){
             for(Param header : headers){
@@ -774,7 +790,7 @@ public class OkHttpClientManager {
         return requestBuilder.build();
     }
 
-    private Request buildDeleteRequest(String url, Param[] params, Param[] headers) {
+    private Request buildDeleteRequest(String url, Param[] params, String userAgent, Param[] headers) {
         if (params == null) {
             params = new Param[0];
         }
@@ -783,9 +799,12 @@ public class OkHttpClientManager {
             builder.add(param.key, param.value);
         }
         RequestBody requestBody = builder.build();
-        Request.Builder requestBuilder = new Request.Builder()
-                .url(url)
-                .delete(requestBody);
+        Request.Builder builder2 = new Request.Builder()
+                .url(url);
+        if(StringUtils.isNotEmpty(userAgent)){
+            builder2.removeHeader("User-Agent").addHeader("User-Agent", userAgent);
+        }
+        Request.Builder requestBuilder = builder2.delete(requestBody);
 
         if(headers!=null && headers.length > 0){
             for(Param header : headers){
@@ -796,7 +815,7 @@ public class OkHttpClientManager {
         return requestBuilder.build();
     }
 
-    private Request buildPutRequest(String url, Param[] params, Param[] headers) {
+    private Request buildPutRequest(String url, Param[] params, String userAgent, Param[] headers) {
         if (params == null) {
             params = new Param[0];
         }
@@ -805,9 +824,12 @@ public class OkHttpClientManager {
             builder.add(param.key, param.value);
         }
         RequestBody requestBody = builder.build();
-        Request.Builder requestBuilder = new Request.Builder()
-                .url(url)
-                .put(requestBody);
+        Request.Builder builder2 = new Request.Builder()
+                .url(url);
+        if(StringUtils.isNotEmpty(userAgent)){
+            builder2.removeHeader("User-Agent").addHeader("User-Agent", userAgent);
+        }
+        Request.Builder requestBuilder = builder2.put(requestBody);
 
         if(headers!=null && headers.length > 0){
             for(Param header : headers){

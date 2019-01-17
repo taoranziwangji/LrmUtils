@@ -234,7 +234,7 @@ public class TestMainFloorActivity extends BaseFloorActivity {
                     MyLog.d("okhttp onResponse response=" + response);
                 }
             }
-        },null);
+        }, "", null);
 
         //测试网络请求的取消
         //SystemClock.sleep(10);
@@ -271,7 +271,7 @@ public class TestMainFloorActivity extends BaseFloorActivity {
                 MyLog.d("okhttp onResponse response=" + response);
 
             }
-        },mapHeader);
+        }, "", mapHeader);
 
     }
 
@@ -300,7 +300,7 @@ public class TestMainFloorActivity extends BaseFloorActivity {
                 MyLog.d("okhttp onResponse response=" + response);
 
             }
-        },json,null);
+        },json, "", null);
 
     }
 
@@ -330,7 +330,7 @@ public class TestMainFloorActivity extends BaseFloorActivity {
                 MyLog.d("okhttp onResponse response=" + response);
 
             }
-        },map,null);
+        },map, "", null);
 
     }
 
