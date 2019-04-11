@@ -5,4 +5,5 @@ package com.vdolrm.lrmutils.OpenSourceUtils.net.download;
  */
 public interface OSIDownLoad {
     void download(String flag, String url, String destDir, String fileName, OSIHttpDownloadCallBack callback);
+    void cancelRequest();
 }

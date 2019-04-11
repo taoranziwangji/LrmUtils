@@ -302,8 +302,8 @@ public class OkHttpClientManager {
      * @param destFileDir 本地文件存储的文件夹
      * @param callback
      */
-    private void _downloadAsyn(final String flag, final String url, final String destFileDir, final OSIHttpDownloadCallBack callback) {
-        _downloadAsyn(flag, url, destFileDir, getFileName(url), callback);
+    private Call _downloadAsyn(final String flag, final String url, final String destFileDir, final OSIHttpDownloadCallBack callback) {
+        return _downloadAsyn(flag, url, destFileDir, getFileName(url), callback);
     }
 
     /**
@@ -314,7 +314,7 @@ public class OkHttpClientManager {
      * @param callback
      * @param fileName    文件名
      */
-    private void _downloadAsyn(final String flag, final String url, final String destFileDir, final String fileName, final OSIHttpDownloadCallBack callback) {
+    private Call _downloadAsyn(final String flag, final String url, final String destFileDir, final String fileName, final OSIHttpDownloadCallBack callback) {
 
         final Request request = new Request.Builder()
                 .url(url)
@@ -361,6 +361,8 @@ public class OkHttpClientManager {
 
             }
         });
+
+        return call;
 
     }
 
@@ -551,8 +553,8 @@ public class OkHttpClientManager {
      * @param destDir  本地文件存储的文件夹
      * @param callback
      */
-    public static void downloadAsyn(final String flag, String url, String destDir, OSIHttpDownloadCallBack callback) {
-        getInstance()._downloadAsyn(flag, url, destDir, callback);
+    public static Call downloadAsyn(final String flag, String url, String destDir, OSIHttpDownloadCallBack callback) {
+        return getInstance()._downloadAsyn(flag, url, destDir, callback);
     }
 
     /**
@@ -563,8 +565,35 @@ public class OkHttpClientManager {
      * @param callback
      * @param fileName
      */
-    public static void downloadAsyn(final String flag, String url, String destDir, String fileName, OSIHttpDownloadCallBack callback) {
-        getInstance()._downloadAsyn(flag, url, destDir, fileName, callback);
+    public static Call downloadAsyn(final String flag, String url, String destDir, String fileName, OSIHttpDownloadCallBack callback) {
+        return getInstance()._downloadAsyn(flag, url, destDir, fileName, callback);
+    }
+
+    /**
+     * 获取下载文件的长度
+     *
+     * @param downloadUrl
+     * @return
+     */
+    public static long getFileLength(String downloadUrl) {
+        return getInstance()._getFileLength(downloadUrl);
+    }
+
+    private long _getFileLength(String downloadUrl){
+        Request request = new Request.Builder()
+                .url(downloadUrl)
+                .build();
+        try {
+            Response response = mOkHttpClient.newCall(request).execute();
+            if (response != null && response.isSuccessful()) {
+                long contentLength = response.body().contentLength();
+                response.body().close();
+                return contentLength == 0 ? -1 : contentLength;
+            }
+        } catch (IOException|RuntimeException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
     //****************************

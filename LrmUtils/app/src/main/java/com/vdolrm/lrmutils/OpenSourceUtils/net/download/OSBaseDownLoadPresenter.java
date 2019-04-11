@@ -24,4 +24,13 @@ public abstract class OSBaseDownLoadPresenter {
         if (osiHttpLoader != null)
             osiHttpLoader.download(flag, url,destDir,fileName,callback);
     }
+
+    /**
+     * 取消下载
+     */
+    public void cancelRequest(){
+        if(osiHttpLoader != null){
+            osiHttpLoader.cancelRequest();
+        }
+    }
 }
