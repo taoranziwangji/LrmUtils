@@ -19,6 +19,7 @@ import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -44,6 +45,11 @@ public class OkHttpClientManager {
     private Handler mDelivery;
     private Gson mGson;
 
+    private static int CONNECT_TIMEOUT = 0;
+    private static int READ_TIMEOUT = 0;
+    private static int WRITE_TIMEOUT = 0;
+    private static boolean retryOnConnectionFailure = false;
+
 
     private static final String TAG = "OkHttpClientManager";
     public static final MediaType JSON=MediaType.parse("application/json;charset=utf-8");
@@ -67,8 +73,32 @@ public class OkHttpClientManager {
         }
     };
 
+    //下述四个方法需要在初始化时调用
+    public static void setConnectionTimeOut(int t){
+        CONNECT_TIMEOUT = t;
+    }
+
+    public static void setReadTimeOut(int t){
+        READ_TIMEOUT = t;
+    }
+
+    public static void setWriteTimeOut(int t){
+        WRITE_TIMEOUT = t;
+    }
+
+    public static void setRetryOnConnectionFailure(boolean b){
+        retryOnConnectionFailure = b;
+    }
+
+
     private OkHttpClientManager() {
-        mOkHttpClient = new OkHttpClient();
+        //mOkHttpClient = new OkHttpClient();
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.retryOnConnectionFailure(retryOnConnectionFailure);
+        if(CONNECT_TIMEOUT > 0) builder.connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS); //连接超时
+        if(READ_TIMEOUT > 0) builder.readTimeout(READ_TIMEOUT, TimeUnit.SECONDS); //读取超时
+        if(WRITE_TIMEOUT > 0) builder.writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS); //写超时
+        mOkHttpClient = builder.build();
         //根据业务服务器的配置来定，笨鸟服务器返回的接口没让缓存
 //        int cacheSize = 10 * 1024 * 1024; // 10 MiB
 //        Cache cache = new Cache(new File(StorageUtil.getAppCachePath(UIUtils.getContext()) + "/httpCache"), cacheSize);
