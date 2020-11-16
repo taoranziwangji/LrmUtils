@@ -1,10 +1,12 @@
 package com.vdolrm.lrmutils.Adapter.PageAdapter;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+
 
 import java.util.List;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 
 /**
  * FragmentPagerAdapter类内的每一个生成的 Fragment 都将保存在内存之中，因此适用于那些相对静态的页，数量也比较少的那种；
@@ -15,7 +17,7 @@ public class BaseFragmentPagerAdapter extends FragmentPagerAdapter {
     private List<String> list_title;
     private List<Fragment> list_fragment;
 
-    public BaseFragmentPagerAdapter(FragmentManager fm,List<String> list_title,List<Fragment> list_fragment) {
+    public BaseFragmentPagerAdapter(FragmentManager fm, List<String> list_title, List<Fragment> list_fragment) {
         super(fm);
         this.list_title = list_title;
         this.list_fragment = list_fragment;

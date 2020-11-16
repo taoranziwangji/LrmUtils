@@ -1,8 +1,8 @@
 package com.vdolrm.lrmutils.Adapter.RecyclerViewAdapter;
 
-import android.support.v7.widget.RecyclerView;
-import android.view.ViewGroup;
 import android.view.View;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by Administrator on 2016/3/28.

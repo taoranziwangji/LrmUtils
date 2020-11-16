@@ -4,17 +4,13 @@ import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.MediaPlayer;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vdolrm.lrmutils.Adapter.RecyclerViewAdapter.BaseMyAdapter;
 import com.vdolrm.lrmutils.Adapter.RecyclerViewAdapter.BaseViewHolder;
 import com.vdolrm.lrmutils.Adapter.RecyclerViewAdapter.OnRecyclerViewItemClickListener;
@@ -22,8 +18,6 @@ import com.vdolrm.lrmutils.Adapter.RecyclerViewAdapter.OnRecyclerViewScrollImage
 import com.vdolrm.lrmutils.BaseFloorActivity;
 import com.vdolrm.lrmutils.FileUtils.StorageUtil;
 import com.vdolrm.lrmutils.LogUtils.MyLog;
-import com.vdolrm.lrmutils.OpenSourceUtils.img.OSBaseImageLoaderPresenter;
-import com.vdolrm.lrmutils.OpenSourceUtils.img.TestImageLoaderPresenter;
 import com.vdolrm.lrmutils.OpenSourceUtils.net.download.OSIHttpDownloadCallBack;
 import com.vdolrm.lrmutils.OpenSourceUtils.net.download.TestDownLoadPresenter;
 import com.vdolrm.lrmutils.OpenSourceUtils.net.http.OSIHttpLoaderCallBack;
@@ -40,6 +34,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 //https://github.com/duzechao/DownloadManager 使用okhttp greendao 支持断点续传和暂停等功能的下载框架
 public class TestMainFloorActivity extends BaseFloorActivity {
     //private static final String url = "http://test.benniaoyasi.cn/api.php?appid=1&m=api&c=category&a=listcategory&pid=1&devtype=android&version=1.4.0";
@@ -51,7 +50,6 @@ public class TestMainFloorActivity extends BaseFloorActivity {
     private static final String url_baidu = "http://www.gogo-talk.com";
     private ImageView mImageView;
     private RecyclerView recyclerView;
-    private OSBaseImageLoaderPresenter imageLoaderPresenter;
     private TestHttpLoaderPresenter httpLoaderPresenter;
 
 
@@ -365,8 +363,7 @@ public class TestMainFloorActivity extends BaseFloorActivity {
             }
         });
         recyclerView.setAdapter(adapter);
-        imageLoaderPresenter = TestImageLoaderPresenter.getInstance(this);
-        recyclerView.addOnScrollListener(new OnRecyclerViewScrollImageStateListener(this, imageLoaderPresenter));
+        recyclerView.addOnScrollListener(new OnRecyclerViewScrollImageStateListener(this));
         //设置Item增加、移除动画 (不是初始时的动画 而是添加删除item时的动画)
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -499,9 +496,6 @@ public class TestMainFloorActivity extends BaseFloorActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (imageLoaderPresenter != null) {
-            imageLoaderPresenter.cancelTag(this);
-        }
 
         TestApplication.getInstance().exit(this);
     }

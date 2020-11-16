@@ -1,12 +1,13 @@
 package com.vdolrm.lrmutils.Adapter.RecyclerViewAdapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by Administrator on 2016/3/28.

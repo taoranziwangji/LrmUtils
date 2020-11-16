@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/LrmUtils.iml" filepath="$PROJECT_DIR$/LrmUtils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/LrmUtils-LrmUtils.iml" filepath="$PROJECT_DIR$/.idea/modules/LrmUtils-LrmUtils.iml" group="LrmUtils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/LrmUtils-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/LrmUtils-app.iml" group="LrmUtils/app" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

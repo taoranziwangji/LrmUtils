@@ -1,7 +1,6 @@
 package com.vdolrm.lrmutils.Test;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import com.vdolrm.lrmutils.FileUtils.StorageUtil;
 import com.vdolrm.lrmutils.LogUtils.MyLog;
@@ -10,6 +9,8 @@ import com.vdolrm.lrmutils.OpenSourceUtils.net.upload.TestUpLoadPresenter;
 import com.vdolrm.lrmutils.R;
 
 import java.io.File;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class TestUploadActivity extends AppCompatActivity {
     String TAG_NET = "lrmnet";

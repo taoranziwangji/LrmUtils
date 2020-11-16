@@ -1,10 +1,12 @@
 package com.vdolrm.lrmutils.Adapter.PageAdapter;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+
 
 import java.util.List;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 
 /**
  * 该 PagerAdapter 的实现将只保留当前页面，
@@ -16,7 +18,7 @@ public class BaseFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
     private List<String> list_title;
     private List<Fragment> list_fragment;
 
-    public BaseFragmentStatePagerAdapter(FragmentManager fm,List<String> list_title,List<Fragment> list_fragment) {
+    public BaseFragmentStatePagerAdapter(FragmentManager fm, List<String> list_title, List<Fragment> list_fragment) {
         super(fm);
         this.list_title = list_title;
         this.list_fragment = list_fragment;

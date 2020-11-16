@@ -2,15 +2,15 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
 
     defaultConfig {
         //applicationId "com.vdolrm.lrmutils"
-        minSdkVersion 8
-        targetSdkVersion 23
-        versionCode 12
-        versionName "1.0.11"
+        minSdkVersion 14
+        targetSdkVersion 28
+        versionCode 13
+        versionName "1.1.0"
     }
     buildTypes {
         release {
@@ -24,19 +24,20 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:design:23.1.1'
-    //图片裁剪
-    compile 'com.soundcloud.android:android-crop:1.0.1@aar'
+    //图片裁剪 https://github.com/jdamcd/android-crop
+    implementation 'com.soundcloud.android:android-crop:1.0.1@aar'
     //picasso
-    //compile 'com.squareup.picasso:picasso:2.5.2'//解决使用mulitiImageSelector时需要2.4版本才能在相册选择时不会出现多图时有些大图显示不出来的问题，好像是2.5.2的一个BUG
-    compile 'com.squareup.picasso:picasso:2.4.0'
+    //implementation 'com.squareup.picasso:picasso:2.4.0'//解决使用mulitiImageSelector时需要2.4版本才能在相册选择时不会出现多图时有些大图显示不出来的问题，好像是2.5.2的一个BUG
     //okhttp
-    compile 'com.squareup.okhttp3:okhttp:3.2.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.12.0'
     //gson
-    compile 'com.google.code.gson:gson:2.6.2'
+    implementation 'com.google.code.gson:gson:2.8.6'
 
 
 

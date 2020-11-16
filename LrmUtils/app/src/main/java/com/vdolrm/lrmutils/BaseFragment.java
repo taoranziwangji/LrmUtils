@@ -2,7 +2,6 @@ package com.vdolrm.lrmutils;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,8 @@ import com.vdolrm.lrmutils.ThreadUtils.ThreadManager;
 import com.vdolrm.lrmutils.UIUtils.UIUtils;
 import com.vdolrm.lrmutils.UIUtils.ViewUtils;
 import com.vdolrm.lrmutils.Widght.LoadingPage;
+
+import androidx.fragment.app.Fragment;
 
 
 public abstract class BaseFragment extends Fragment {

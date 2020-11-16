@@ -31,8 +31,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Test.TestMainFloorActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".Test.TestMainFloorActivity">
             <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,8 +39,7 @@
             </intent-filter>-->
         </activity>
         <activity android:name=".Test.TestBigPicShowFloorActivity" />
-        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
-        <activity android:name=".Test.TestFragmentViewPagerFloorActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".Test.TestFragmentViewPagerFloorActivity"/>
         <activity android:name=".Test.TestUploadActivity"/>
         <activity android:name=".Test.TestJaveJSFloorActivity"/>
     </application>

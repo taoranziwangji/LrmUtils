@@ -2,13 +2,16 @@ package com.vdolrm.lrmutils.ImageUtils;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.widget.Toast;
+
+import com.soundcloud.android.crop.CropImageActivity;
+
+import androidx.fragment.app.Fragment;
 
 /**
  * Builder for crop Intents and utils for handling result
@@ -99,8 +102,9 @@ public class CropAddCamera {
         activity.startActivityForResult(getIntent(activity), requestCode);
     }
 
+
     /**
-     * Send the crop Intent from a Fragment
+     * Send the crop Intent from a support library Fragment
      *
      * @param context  Context
      * @param fragment Fragment to receive result
@@ -109,15 +113,6 @@ public class CropAddCamera {
         start(context, fragment, REQUEST_CROP);
     }
 
-    /**
-     * Send the crop Intent from a support library Fragment
-     *
-     * @param context  Context
-     * @param fragment Fragment to receive result
-     */
-    public void start(Context context, android.support.v4.app.Fragment fragment) {
-        start(context, fragment, REQUEST_CROP);
-    }
 
     /**
      * Send the crop Intent with a custom request code
@@ -126,19 +121,7 @@ public class CropAddCamera {
      * @param fragment    Fragment to receive result
      * @param requestCode requestCode for result
      */
-    @SuppressLint("NewApi")
     public void start(Context context, Fragment fragment, int requestCode) {
-        fragment.startActivityForResult(getIntent(context), requestCode);
-    }
-
-    /**
-     * Send the crop Intent with a custom request code
-     *
-     * @param context     Context
-     * @param fragment    Fragment to receive result
-     * @param requestCode requestCode for result
-     */
-    public void start(Context context, android.support.v4.app.Fragment fragment, int requestCode) {
         fragment.startActivityForResult(getIntent(context), requestCode);
     }
 
@@ -149,7 +132,7 @@ public class CropAddCamera {
      * @return Intent for CropImageActivity
      */
     public Intent getIntent(Context context) {
-        cropIntent.setClass(context, com.soundcloud.android.crop.CropImageActivity.class);
+        cropIntent.setClass(context, CropImageActivity.class);
         return cropIntent;
     }
 
@@ -181,15 +164,6 @@ public class CropAddCamera {
         pickImage(activity, REQUEST_PICK);
     }
 
-    /**
-     * Pick image from a Fragment
-     *
-     * @param context  Context
-     * @param fragment Fragment to receive result
-     */
-    public static void pickImage(Context context, Fragment fragment) {
-        pickImage(context, fragment, REQUEST_PICK);
-    }
 
     /**
      * Pick image from a support library Fragment
@@ -197,7 +171,7 @@ public class CropAddCamera {
      * @param context  Context
      * @param fragment Fragment to receive result
      */
-    public static void pickImage(Context context, android.support.v4.app.Fragment fragment) {
+    public static void pickImage(Context context, Fragment fragment) {
         pickImage(context, fragment, REQUEST_PICK);
     }
 
@@ -215,21 +189,6 @@ public class CropAddCamera {
         }
     }
 
-    /**
-     * Pick image from a Fragment with a custom request code
-     *
-     * @param context     Context
-     * @param fragment    Fragment to receive result
-     * @param requestCode requestCode for result
-     */
-    @SuppressLint("NewApi")
-    public static void pickImage(Context context, Fragment fragment, int requestCode) {
-        try {
-            fragment.startActivityForResult(getImagePicker(), requestCode);
-        } catch (ActivityNotFoundException e) {
-            showImagePickerError(context);
-        }
-    }
 
     /**
      * Pick image from a support library Fragment with a custom request code
@@ -238,7 +197,7 @@ public class CropAddCamera {
      * @param fragment    Fragment to receive result
      * @param requestCode requestCode for result
      */
-    public static void pickImage(Context context, android.support.v4.app.Fragment fragment, int requestCode) {
+    public static void pickImage(Context context, Fragment fragment, int requestCode) {
         try {
             fragment.startActivityForResult(getImagePicker(), requestCode);
         } catch (ActivityNotFoundException e) {
